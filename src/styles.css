@@ -1,0 +1,2837 @@
+:root {
+  --boda-blue: #223895;
+  --boda-blue-deep: #07164c;
+  --boda-yellow: #ffcf1b;
+  --ink: #080a10;
+  --paper: #ffffff;
+  --muted: #64708b;
+  --green: #1f8d6f;
+  --green-soft: #dff5e8;
+  --line: rgba(7, 22, 76, 0.14);
+  --shadow: 0 22px 70px rgba(4, 12, 46, 0.18);
+  --radius: 8px;
+  color: var(--ink);
+  background: var(--paper);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--paper);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #edf4fb;
+}
+
+.mapOnlyShell {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 108px);
+  padding: 0;
+}
+
+.heroMapStage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - 108px);
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  padding: 0 clamp(18px, 2.6vw, 34px) clamp(18px, 2.6vw, 34px);
+  background: var(--scrapbook-bg) center center / cover;
+  box-shadow: none;
+}
+
+.heroMapStage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+  mix-blend-mode: normal;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.heroMapStage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: none;
+  pointer-events: none;
+}
+
+.heroDrawing {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  aspect-ratio: auto;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.08)),
+    var(--window-drawing-bg) center center / cover no-repeat;
+  opacity: 0.38;
+  filter: contrast(1.04) saturate(0.86);
+  pointer-events: none;
+  display: none;
+}
+
+.heroDrawing::before,
+.heroDrawing::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.heroDrawing::before {
+  background:
+    radial-gradient(ellipse at 34% 63%, rgba(101, 179, 195, 0.36), transparent 32%),
+    radial-gradient(ellipse at 54% 41%, rgba(91, 162, 188, 0.28), transparent 34%),
+    radial-gradient(ellipse at 77% 61%, rgba(232, 191, 89, 0.22), transparent 28%),
+    radial-gradient(ellipse at 28% 83%, rgba(119, 172, 95, 0.24), transparent 30%),
+    linear-gradient(103deg, transparent 0 9%, rgba(83, 154, 187, 0.22) 18%, transparent 38%),
+    linear-gradient(156deg, transparent 0 37%, rgba(123, 169, 86, 0.18) 47%, transparent 63%),
+    linear-gradient(38deg, transparent 0 58%, rgba(255, 207, 27, 0.14) 68%, transparent 78%);
+  mix-blend-mode: color;
+  opacity: 0.95;
+}
+
+.heroDrawing::after {
+  background:
+    linear-gradient(91deg, transparent 0 22%, rgba(255, 255, 255, 0.42) 25%, transparent 31%),
+    linear-gradient(91deg, transparent 0 63%, rgba(255, 255, 255, 0.3) 66%, transparent 72%);
+  opacity: 0.7;
+}
+
+.memorialHeader {
+  position: absolute;
+  top: clamp(34px, 6vh, 66px);
+  left: clamp(32px, 7vw, 132px);
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  width: min(300px, 24vw);
+  color: rgba(7, 9, 13, 0.86);
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+.memorialHeader span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.88rem, 1.1vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.memorialHeader em {
+  margin-top: -4px;
+  font-family: "Brush Script MT", "Segoe Script", cursive;
+  font-size: clamp(2.15rem, 3vw, 3.35rem);
+  line-height: 0.86;
+  font-style: italic;
+}
+
+.memorialHeader strong {
+  max-width: 100%;
+  margin-top: 14px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 2.15vw, 2.5rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.memorialHeader small {
+  margin-top: 5px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.8rem, 1vw, 1.1rem);
+  font-weight: 700;
+}
+
+.artTableDetails {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.paintDrop {
+  position: absolute;
+  display: block;
+  border-radius: 999px 999px 999px 50%;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow:
+    inset 5px 7px 12px rgba(255, 255, 255, 0.72),
+    inset -5px -7px 14px rgba(57, 116, 156, 0.16),
+    0 9px 18px rgba(7, 22, 76, 0.1);
+  transform: rotate(-18deg);
+}
+
+.dropOne {
+  right: clamp(180px, 18vw, 330px);
+  bottom: clamp(54px, 8vh, 98px);
+  width: 34px;
+  height: 28px;
+}
+
+.dropTwo {
+  right: clamp(132px, 14vw, 250px);
+  bottom: clamp(88px, 12vh, 142px);
+  width: 22px;
+  height: 18px;
+  opacity: 0.76;
+}
+
+.dropThree {
+  right: clamp(228px, 24vw, 420px);
+  bottom: clamp(86px, 12vh, 150px);
+  width: 18px;
+  height: 15px;
+  opacity: 0.58;
+}
+
+.paperclipShape {
+  position: absolute;
+  right: clamp(112px, 11vw, 210px);
+  bottom: clamp(30px, 5vh, 64px);
+  width: 118px;
+  height: 42px;
+  border: 7px solid rgba(126, 105, 78, 0.64);
+  border-left-width: 0;
+  border-radius: 0 26px 26px 0;
+  opacity: 0.52;
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 7px 9px rgba(64, 43, 22, 0.16));
+}
+
+.paperclipShape::after {
+  content: "";
+  position: absolute;
+  inset: 8px 10px 8px -10px;
+  border: 5px solid rgba(126, 105, 78, 0.56);
+  border-left-width: 0;
+  border-radius: 0 18px 18px 0;
+}
+
+.paintBrushShape {
+  position: absolute;
+  right: -38px;
+  bottom: -16px;
+  width: 250px;
+  height: 18px;
+  border-radius: 999px;
+  background:
+    linear-gradient(90deg, #1c5f9f 0 54%, #cfc7b3 54% 64%, #81684a 64% 72%, #eadfc6 72% 100%);
+  box-shadow: 0 14px 22px rgba(64, 43, 22, 0.2);
+  transform: rotate(-56deg);
+  opacity: 0.78;
+}
+
+.paintBrushShape::after {
+  content: "";
+  position: absolute;
+  right: -32px;
+  top: -8px;
+  width: 44px;
+  height: 32px;
+  border-radius: 70% 25% 70% 35%;
+  background: linear-gradient(90deg, #3d261a, #1e1612);
+  transform: rotate(8deg);
+}
+
+.memorialPortraitWash {
+  position: absolute;
+  top: 112px;
+  right: -24px;
+  z-index: 1;
+  width: min(38vw, 520px);
+  height: min(68vh, 610px);
+  border: 0;
+  opacity: 0.14;
+  object-fit: cover;
+  object-position: 79% 13%;
+  filter: grayscale(0.08) contrast(1.04) saturate(0.86);
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 72%, transparent 100%);
+  pointer-events: none;
+  display: none;
+}
+
+.bodaGptSticker {
+  position: absolute;
+  top: clamp(14px, 2.3vh, 28px);
+  right: clamp(18px, 4vw, 68px);
+  z-index: 5;
+  display: grid;
+  gap: 5px;
+  min-width: 178px;
+  border: 2px solid rgba(7, 22, 76, 0.2);
+  border-radius: 6px;
+  padding: 10px 13px 12px;
+  color: #07164c;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.36), transparent 44%),
+    #ffdc54;
+  box-shadow:
+    0 14px 24px rgba(70, 42, 13, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.42);
+  text-decoration: none;
+  text-align: left;
+  transform: rotate(2.5deg);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.bodaGptSticker::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 74px;
+  height: 18px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 5px 10px rgba(80, 59, 32, 0.14);
+  transform: translateX(-50%) rotate(-5deg);
+}
+
+.bodaGptSticker::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  bottom: -12px;
+  width: 22px;
+  height: 22px;
+  background: #ffdc54;
+  border-right: 2px solid rgba(7, 22, 76, 0.14);
+  border-bottom: 2px solid rgba(7, 22, 76, 0.14);
+  transform: rotate(45deg);
+}
+
+.bodaGptSticker span,
+.bodaGptSticker strong {
+  position: relative;
+  z-index: 1;
+}
+
+.bodaGptSticker span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.bodaGptSticker strong {
+  font-size: 1rem;
+  line-height: 1.05;
+}
+
+.bodaGptSticker:hover,
+.bodaGptSticker:focus-visible {
+  box-shadow:
+    0 18px 30px rgba(70, 42, 13, 0.26),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  outline: 3px solid rgba(255, 255, 255, 0.86);
+  outline-offset: 3px;
+  transform: rotate(1deg) translateY(-2px);
+}
+
+.bodaChatPanel {
+  position: absolute;
+  top: clamp(92px, 13vh, 132px);
+  right: clamp(18px, 4vw, 68px);
+  z-index: 8;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  gap: 10px;
+  width: min(380px, calc(100vw - 36px));
+  max-height: min(610px, calc(100vh - 152px));
+  border: 2px solid rgba(7, 22, 76, 0.18);
+  border-radius: 8px;
+  padding: 14px;
+  color: #07164c;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 249, 224, 0.94)),
+    #fff6c8;
+  box-shadow: 0 24px 56px rgba(70, 42, 13, 0.26);
+}
+
+.bodaChatPanel header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bodaChatPanel header span {
+  color: #0b5f49;
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.bodaChatPanel h2 {
+  margin: 2px 0 0;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.bodaChatPanel header button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--boda-blue);
+}
+
+.bodaChatMessages {
+  display: grid;
+  gap: 8px;
+  max-height: 330px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.bodaChatMessages p {
+  width: fit-content;
+  max-width: 92%;
+  margin: 0;
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.bodaChatMessages .assistant {
+  color: #07164c;
+  background: rgba(34, 56, 149, 0.1);
+}
+
+.bodaChatMessages .user {
+  justify-self: end;
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.bodaChatError {
+  border-radius: 6px;
+  padding: 8px 9px;
+  color: #fff;
+  background: #9b2929;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.bodaChatForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px;
+  gap: 8px;
+}
+
+.bodaChatForm input {
+  min-width: 0;
+  min-height: 42px;
+  border: 1px solid rgba(7, 22, 76, 0.22);
+  border-radius: 7px;
+  padding: 0 11px;
+  color: #07164c;
+  background: #fff;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.bodaChatForm button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.bodaChatForm button:disabled {
+  cursor: not-allowed;
+  opacity: 0.52;
+}
+
+.bodaChatFallback {
+  width: fit-content;
+  color: var(--boda-blue);
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.introVideoLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #050608;
+  animation: introFadeIn 420ms ease both;
+}
+
+.introVideoLayer video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.introVideoLayer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(7, 22, 76, 0.04), rgba(7, 22, 76, 0.24)),
+    linear-gradient(90deg, rgba(7, 22, 76, 0.2), transparent 40%, rgba(7, 22, 76, 0.22));
+  pointer-events: none;
+}
+
+.introVideoLayer button {
+  position: absolute;
+  right: clamp(16px, 3vw, 34px);
+  bottom: clamp(16px, 3vw, 34px);
+  z-index: 2;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  color: #111;
+  background: rgba(255, 207, 27, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+  font-size: 0.86rem;
+  font-weight: 950;
+}
+
+.heroIntro {
+  position: relative;
+  z-index: 2;
+  max-width: 480px;
+}
+
+.heroIntro strong {
+  display: inline-block;
+  margin-top: 18px;
+  border-left: 6px solid var(--boda-yellow);
+  padding-left: 12px;
+  color: var(--boda-blue-deep);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+}
+
+.heroMapCanvas {
+  z-index: 2;
+  width: min(96vw, 1500px);
+  min-height: calc(100vh - 148px);
+  border: 0;
+  background:
+    linear-gradient(116deg, rgba(66, 163, 190, 0.14), transparent 42%),
+    transparent;
+  box-shadow: none;
+}
+
+.heroMapCanvas .barbadosMapFrame {
+  width: min(72vw, 820px, calc((100vh - 142px) * 0.7576));
+  max-width: 94%;
+  aspect-ratio: 500 / 660;
+  height: auto;
+}
+
+.heroMarker {
+  grid-template-columns: 48px;
+  max-width: 60px;
+  min-width: 58px;
+  padding: 5px;
+  border: 3px solid #fff;
+  background: var(--boda-blue);
+  box-shadow: 0 18px 38px rgba(7, 22, 76, 0.42);
+  animation: none;
+}
+
+.heroMarker span {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+  border: 3px solid var(--boda-yellow);
+  color: #fff;
+  background: var(--boda-blue-deep);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+.heroMarker.active span {
+  color: var(--boda-blue-deep);
+  background: var(--boda-yellow);
+}
+
+.heroMarker strong {
+  position: absolute;
+  left: 62px;
+  top: 50%;
+  width: max-content;
+  max-width: 260px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--boda-blue-deep);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 26px rgba(7, 22, 76, 0.14);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.heroMarker:hover strong,
+.heroMarker:focus-visible strong,
+.heroMarker.active strong {
+  opacity: 1;
+}
+
+.immersiveMemory {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+  color: #fff;
+  background: #050607;
+}
+
+.immersiveMemory iframe,
+.immersiveMemory > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.immersiveMemory::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 20%, rgba(0, 0, 0, 0.7)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.28), transparent 38%);
+  pointer-events: none;
+}
+
+.immersiveTop,
+.immersiveStatus,
+.immersiveStory,
+.immersiveAudio,
+.ambientToggle {
+  position: relative;
+  z-index: 2;
+}
+
+.immersiveTop {
+  position: absolute;
+  z-index: 4;
+  top: 18px;
+  right: 18px;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.backButton,
+.viewBadge,
+.sceneGuideButton,
+.journeyStops button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius);
+  padding: 0 13px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.74);
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.viewBadge {
+  color: #111;
+  background: var(--boda-yellow);
+  border-color: var(--boda-yellow);
+}
+
+.sceneGuideButton,
+.journeyStops button {
+  background: rgba(0, 0, 0, 0.76);
+}
+
+.sceneGuideButton.active {
+  color: #111;
+  background: #fff;
+}
+
+.journeyStops {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.journeyMemoryControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.journeyMemoryControls button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: var(--radius);
+  padding: 0 11px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.78);
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.journeyMemoryControls button:not(:disabled):hover,
+.journeyMemoryControls button:not(:disabled):focus-visible {
+  color: #111;
+  background: var(--boda-yellow);
+  border-color: var(--boda-yellow);
+}
+
+.journeyMemoryControls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.journeyStops button {
+  min-height: 38px;
+  padding: 0 11px;
+  font-size: 0.78rem;
+}
+
+.journeyStops button span {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  color: #111;
+  background: rgba(255, 255, 255, 0.86);
+  font-size: 0.72rem;
+  font-weight: 950;
+}
+
+.journeyStops button.active {
+  color: #111;
+  background: var(--boda-yellow);
+  border-color: var(--boda-yellow);
+}
+
+.immersiveStatus {
+  position: absolute;
+  top: 74px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(540px, calc(100vw - 36px));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius);
+  padding: 12px 13px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.82);
+  box-shadow: 0 16px 36px rgba(7, 22, 76, 0.28);
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.immersiveStatus.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+.immersiveStatus span {
+  flex: 1;
+}
+
+.immersiveStatus a {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: #111;
+  background: var(--boda-yellow);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 950;
+}
+
+.immersiveStory {
+  align-self: end;
+  max-width: 620px;
+  margin: auto auto 138px clamp(18px, 5vw, 64px);
+  padding-right: 18px;
+}
+
+.immersiveStory span {
+  color: var(--boda-yellow);
+  font-size: 0.83rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.immersiveStory h1 {
+  margin: 8px 0 8px;
+  font-size: clamp(2.4rem, 6vw, 5.6rem);
+  line-height: 0.94;
+  letter-spacing: 0;
+}
+
+.immersiveStory strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #c9f5df;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+.immersiveStory p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.sceneGuidePanel {
+  position: absolute;
+  top: 82px;
+  right: 18px;
+  z-index: 3;
+  display: grid;
+  gap: 14px;
+  width: min(430px, calc(100vw - 36px));
+  max-height: calc(100vh - 228px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: #fff;
+  background: rgba(5, 8, 16, 0.88);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(16px);
+}
+
+.sceneGuidePanel h2 {
+  margin: 4px 0 8px;
+  font-size: 1.7rem;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.sceneGuidePanel p,
+.sceneGuidePanel ul {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.sceneGuidePanel ul {
+  display: grid;
+  gap: 6px;
+  padding-left: 18px;
+}
+
+.sceneKicker {
+  display: inline-block;
+  color: var(--boda-yellow);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.activeStopNote {
+  display: block;
+  margin-bottom: 8px;
+  color: #c9f5df;
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.sceneLandmarks {
+  display: grid;
+  gap: 8px;
+}
+
+.sceneLandmarks a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius);
+  padding: 10px;
+  color: inherit;
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+}
+
+.sceneLandmarks a strong {
+  font-size: 0.93rem;
+}
+
+.sceneLandmarks a small {
+  grid-column: 1 / -1;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.sceneLandmarks a svg {
+  grid-row: 1;
+  grid-column: 2;
+  color: var(--boda-yellow);
+}
+
+.sceneConfidence {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: #111;
+  background: #fff;
+  font-size: 0.76rem;
+  font-weight: 950;
+}
+
+.sceneConfidence.confirmed-landmark {
+  background: #c9f5df;
+}
+
+.sceneConfidence.nearby-best-fit {
+  background: #ffe48a;
+}
+
+.sceneConfidence.research-needed {
+  color: #fff;
+  background: #815a21;
+}
+
+.immersiveAudio {
+  position: absolute;
+  right: clamp(16px, 4vw, 54px);
+  bottom: 24px;
+  left: clamp(16px, 4vw, 54px);
+  grid-template-columns: minmax(150px, 0.62fr) auto minmax(220px, 1fr) auto auto;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.ambientToggle {
+  position: absolute;
+  right: clamp(16px, 4vw, 54px);
+  bottom: 122px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 38px;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 999px;
+  padding: 0 12px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.76);
+  box-shadow: 0 12px 30px rgba(7, 22, 76, 0.26);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.ambientToggle[aria-pressed="true"] {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.paperGrain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.24;
+  background-image:
+    linear-gradient(rgba(7, 22, 76, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(7, 22, 76, 0.025) 1px, transparent 1px);
+  background-size: 29px 31px, 37px 41px;
+  mask-image: linear-gradient(to bottom, #000, transparent 90%);
+}
+
+.appHeader,
+.experienceShell {
+  position: relative;
+  z-index: 12;
+}
+
+.appHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 108px;
+  padding: 0 clamp(18px, 3vw, 40px);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.34);
+  background:
+    linear-gradient(180deg, rgba(36, 70, 184, 0.88), rgba(13, 44, 137, 0.96)),
+    var(--boda-blue);
+  backdrop-filter: none;
+  box-shadow: 0 14px 34px rgba(7, 22, 76, 0.2);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  min-width: 0;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand img {
+  width: 104px;
+  height: 104px;
+  margin-bottom: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+.brand span {
+  display: grid;
+  gap: 1px;
+}
+
+.brand strong {
+  font-size: clamp(2.05rem, 3vw, 3.05rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.titleLockup {
+  display: flex;
+  align-items: baseline;
+  gap: 17px;
+}
+
+.titleLockup em {
+  color: var(--boda-yellow);
+  font-size: clamp(1.32rem, 2vw, 2rem);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.brand small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.headerNav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.headerNav a,
+.navButton,
+.xrButton,
+.familyNavButton,
+.menuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 58px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 22px;
+  color: var(--boda-blue-deep);
+  background: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.navButton {
+  color: rgba(7, 22, 76, 0.52);
+}
+
+.navButton small {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  border-radius: 999px;
+  padding: 0 7px;
+  color: #111;
+  background: rgba(255, 207, 27, 0.42);
+  font-size: 0.68rem;
+  font-weight: 950;
+}
+
+.xrButton {
+  border-color: rgba(255, 207, 27, 0.9);
+  color: #111;
+  background: var(--boda-yellow);
+  box-shadow: 0 12px 26px rgba(255, 207, 27, 0.22);
+}
+
+.enter360Nudge {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 0;
+  z-index: 30;
+  width: min(330px, 38vw);
+  border: 2px solid rgba(7, 22, 76, 0.22);
+  border-radius: 8px;
+  padding: 13px 15px;
+  color: #111;
+  background: #fff7c6;
+  box-shadow:
+    0 12px 26px rgba(7, 22, 76, 0.22),
+    inset 0 -4px 0 rgba(255, 207, 27, 0.34);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.92rem, 1.15vw, 1.1rem);
+  font-weight: 900;
+  line-height: 1.16;
+  pointer-events: none;
+  transform: translateY(-5px) rotate(-1.5deg) scale(0.96);
+  transform-origin: 36px -16px;
+  opacity: 0;
+  animation: enter360Nudge 10s ease-in-out infinite;
+}
+
+.enter360Nudge::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 34px;
+  width: 24px;
+  height: 24px;
+  background: #fff7c6;
+  border-top: 2px solid rgba(7, 22, 76, 0.22);
+  border-left: 2px solid rgba(7, 22, 76, 0.22);
+  transform: rotate(45deg);
+}
+
+.enter360Nudge::after {
+  content: "";
+  position: absolute;
+  top: -34px;
+  left: 35px;
+  width: 44px;
+  height: 28px;
+  border-top: 4px solid var(--boda-yellow);
+  border-left: 4px solid var(--boda-yellow);
+  border-radius: 18px 0 0;
+  transform: rotate(22deg);
+}
+
+@keyframes enter360Nudge {
+  0%,
+  56%,
+  100% {
+    opacity: 0;
+    transform: translateY(-5px) rotate(-1.5deg) scale(0.96);
+  }
+
+  8%,
+  42% {
+    opacity: 1;
+    transform: translateY(0) rotate(-1.5deg) scale(1);
+  }
+
+  16%,
+  30% {
+    transform: translateY(-3px) rotate(-1.5deg) scale(1.02);
+  }
+}
+
+.familyNavButton {
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  background: #050608;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.26);
+}
+
+.familyNavButton.active {
+  border-color: var(--boda-yellow);
+  color: #111;
+  background: #fff;
+}
+
+.familyNavButton small {
+  display: inline-grid;
+  place-items: center;
+  min-height: 22px;
+  border-radius: 4px;
+  padding: 0 8px;
+  color: #111;
+  background: var(--boda-yellow);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.menuButton {
+  min-width: 52px;
+  padding: 0 8px;
+  border: 0;
+  color: #fff;
+  background: transparent;
+}
+
+.landingNav {
+  gap: 16px;
+}
+
+.experienceShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(390px, 0.88fr);
+  gap: clamp(18px, 2.7vw, 34px);
+  height: calc(100vh - 84px);
+  min-height: 690px;
+  padding: clamp(18px, 3vw, 38px);
+}
+
+.mapStage,
+.detailRail {
+  min-width: 0;
+}
+
+.mapStage {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  gap: 14px;
+  padding: clamp(20px, 3.2vw, 38px);
+  border: 1px solid rgba(34, 56, 149, 0.15);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.72)),
+    var(--window-drawing-bg) center / cover;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.stageIntro {
+  max-width: 720px;
+}
+
+.sectionMark {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.stageIntro h1 {
+  margin: 6px 0 8px;
+  color: var(--boda-blue-deep);
+  font-size: clamp(2.35rem, 5.2vw, 5.1rem);
+  line-height: 0.92;
+  letter-spacing: 0;
+}
+
+.stageIntro p {
+  max-width: 620px;
+  margin: 0;
+  color: #27304b;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.mapCanvas {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 290px;
+  overflow: hidden;
+  border: 1px solid rgba(7, 22, 76, 0.11);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(90deg, rgba(34, 56, 149, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(34, 56, 149, 0.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 42%, rgba(69, 167, 126, 0.24), transparent 17rem),
+    #f9fcff;
+  background-size: 42px 42px, 42px 42px, auto, auto;
+}
+
+.heroMapCanvas {
+  min-height: calc(100vh - 148px);
+  overflow: visible;
+  border: 0;
+  background:
+    linear-gradient(116deg, rgba(66, 163, 190, 0.14), transparent 42%),
+    transparent;
+  box-shadow: none;
+}
+
+.barbadosMapFrame {
+  position: relative;
+  width: min(52vw, 420px);
+  max-width: 70%;
+  aspect-ratio: 500 / 660;
+  height: auto;
+  isolation: isolate;
+}
+
+.heroMapCanvas .barbadosMapFrame {
+  width: min(44vw, 500px, calc((100vh - 132px) * 0.48));
+  max-width: 98%;
+  aspect-ratio: 500 / 660;
+  height: auto;
+  transform: translate(-2vw, 5vh) rotate(-1.2deg);
+}
+
+.heroMapCanvas .barbadosMapFrame::before {
+  content: none;
+  position: absolute;
+  inset: -6px -8px -7px;
+  z-index: 0;
+  border: 0;
+  border-radius: 48% 44% 46% 42%;
+  background:
+    radial-gradient(ellipse at 48% 48%, rgba(255, 255, 255, 0.72) 0 52%, transparent 72%),
+    radial-gradient(ellipse at 52% 54%, rgba(91, 179, 205, 0.18) 0 46%, transparent 75%);
+  box-shadow:
+    0 36px 72px rgba(7, 22, 76, 0.24),
+    0 10px 22px rgba(7, 22, 76, 0.12);
+}
+
+.heroMapCanvas .barbadosMapFrame::after {
+  content: none;
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  z-index: 3;
+  width: 122px;
+  height: 30px;
+  border: 1px solid rgba(148, 122, 65, 0.18);
+  border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.18)),
+    rgba(255, 229, 145, 0.64);
+  box-shadow: 0 8px 16px rgba(80, 59, 32, 0.12);
+  transform: translateX(-50%) rotate(3deg);
+  pointer-events: none;
+}
+
+.mapStickerArt {
+  position: absolute;
+  top: 0;
+  left: -20%;
+  z-index: 1;
+  width: 140%;
+  height: 100%;
+  object-fit: fill;
+  opacity: 0.88;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  filter:
+    saturate(0.92)
+    contrast(0.95)
+    brightness(1.04)
+    drop-shadow(0 22px 22px rgba(74, 54, 28, 0.15));
+}
+
+.portraitMemoryMarker {
+  position: absolute;
+  top: clamp(142px, 20vh, 210px);
+  right: clamp(72px, 13vw, 190px);
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  color: var(--boda-blue-deep);
+  background: transparent;
+  filter: drop-shadow(0 14px 22px rgba(7, 22, 76, 0.24));
+}
+
+.portraitMemoryMarker span {
+  width: 54px;
+  height: 54px;
+  border: 4px solid #fff;
+  border-radius: 999px 999px 999px 14px;
+  background: var(--boda-yellow);
+  transform: rotate(-45deg);
+  box-shadow: 0 0 0 7px rgba(255, 207, 27, 0.24);
+}
+
+.portraitMemoryMarker span::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 999px;
+  background: var(--boda-blue-deep);
+}
+
+.portraitMemoryMarker strong {
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.86rem;
+  font-weight: 950;
+  line-height: 1;
+}
+
+.portraitMemoryMarker.active span,
+.portraitMemoryMarker:focus-visible span {
+  box-shadow:
+    0 0 0 7px rgba(255, 207, 27, 0.34),
+    0 0 0 12px rgba(34, 56, 149, 0.18);
+}
+
+.barbadosSvg {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  overflow: visible;
+}
+
+.heroMapCanvas .mapWaterHalo,
+.heroMapCanvas .compassRose,
+.heroMapCanvas .seaLine,
+.heroMapCanvas .stickerIsland,
+.heroMapCanvas .island,
+.heroMapCanvas .coastlineGlow,
+.heroMapCanvas .parishLine,
+.heroMapCanvas .parishLabel {
+  opacity: 0;
+}
+
+.stickerIsland {
+  fill: rgba(255, 255, 255, 0.88);
+  stroke: rgba(255, 255, 255, 0.96);
+  stroke-width: 30;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 18px 18px rgba(7, 22, 76, 0.28));
+}
+
+.island {
+  fill: url("#islandFill");
+  stroke: rgba(22, 74, 66, 0.76);
+  stroke-width: 4.8;
+  stroke-linejoin: round;
+  filter: url("#paperTexture");
+}
+
+.coastlineGlow {
+  fill: none;
+  stroke: rgba(66, 155, 186, 0.3);
+  stroke-width: 24;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.mapWaterHalo {
+  fill: url("#waterWash");
+  opacity: 0.72;
+}
+
+.mapWaterHalo.second {
+  opacity: 0.65;
+}
+
+.parishLine,
+.seaLine {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.parishLine {
+  stroke: rgba(80, 87, 75, 0.32);
+  stroke-width: 2.1;
+  stroke-dasharray: 7 8;
+}
+
+.parishLabel {
+  fill: rgba(26, 39, 35, 0.78);
+  font-family: "Comic Sans MS", "Bradley Hand ITC", "Segoe Print", cursive;
+  font-size: 17px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: 0;
+}
+
+.compassRose {
+  opacity: 0.52;
+}
+
+.compassRose path {
+  fill: none;
+  stroke: rgba(32, 39, 42, 0.64);
+  stroke-width: 2;
+}
+
+.compassRose text {
+  fill: rgba(32, 39, 42, 0.68);
+  font-size: 22px;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+.svgMarker {
+  pointer-events: none;
+}
+
+.svgMarker circle {
+  display: none;
+}
+
+.svgMarker text {
+  fill: #fff;
+  font-size: 13px;
+  font-weight: 950;
+  pointer-events: none;
+}
+
+.svgMarker .pinLabel {
+  fill: var(--boda-blue-deep);
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.94);
+  stroke-width: 6;
+  font-size: 14px;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.pinLeader {
+  stroke: rgba(7, 22, 76, 0.52);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.pinShadow {
+  fill: rgba(7, 22, 76, 0.18);
+}
+
+.pinBody {
+  fill: var(--boda-blue);
+  stroke: #fff;
+  stroke-width: 3.4;
+  filter: drop-shadow(0 12px 14px rgba(7, 22, 76, 0.32));
+}
+
+.pinCore {
+  display: block;
+  fill: rgba(255, 255, 255, 0.92);
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 2;
+}
+
+.svgMarker.toneYellow .pinBody {
+  fill: var(--boda-yellow);
+}
+
+.svgMarker.toneYellow .pinCore {
+  fill: #d89600;
+}
+
+.svgMarker.toneGreen .pinBody {
+  fill: #86a93d;
+}
+
+.svgMarker.toneGreen .pinCore {
+  fill: #577620;
+}
+
+.svgMarker.active .pinBody,
+.svgMarker:focus-visible .pinBody {
+  stroke: var(--boda-yellow);
+  stroke-width: 5;
+}
+
+.svgMarker.active .pinLabel,
+.svgMarker:focus-visible .pinLabel {
+  fill: #07164c;
+}
+
+.heroMapCanvas .pinLeader {
+  stroke-width: 2;
+  stroke: rgba(7, 22, 76, 0.44);
+}
+
+.heroMapCanvas .pinLabel {
+  font-size: 17px;
+  stroke-width: 6.4;
+}
+
+.familyLayerActive .svgMarker {
+  opacity: 0.34;
+}
+
+.familyLayerActive .svgMarker.active {
+  opacity: 0.56;
+}
+
+.svgMarkerNativeButton {
+  position: absolute;
+  z-index: 7;
+  width: 30px;
+  height: 40px;
+  transform: translate(-50%, -47%);
+  border: 0;
+  border-radius: 999px 999px 999px 0;
+  padding: 0;
+  background: transparent;
+  clip-path: polygon(50% 0, 100% 27%, 72% 62%, 50% 100%, 28% 62%, 0 27%);
+}
+
+.svgMarkerNativeButton:focus-visible {
+  outline: 4px solid var(--boda-yellow);
+  outline-offset: 4px;
+}
+
+.familySvgMarker {
+  pointer-events: none;
+}
+
+.familyLeader {
+  stroke: rgba(5, 6, 8, 0.54);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.familyMarkerHalo {
+  fill: #050608;
+  stroke: var(--boda-yellow);
+  stroke-width: 4;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.24));
+}
+
+.familyMarkerCore {
+  fill: var(--boda-yellow);
+}
+
+.familySvgMarker.records .familyMarkerHalo {
+  fill: #fff;
+  stroke: var(--boda-blue);
+}
+
+.familySvgMarker.records .familyMarkerCore {
+  fill: var(--boda-blue);
+}
+
+.familySvgMarker.burial .familyMarkerHalo {
+  fill: #1f1f24;
+  stroke: #fff;
+}
+
+.familySvgMarker.burial .familyMarkerCore {
+  fill: var(--boda-yellow);
+}
+
+.familySvgMarker.active .familyMarkerHalo {
+  stroke-width: 6;
+}
+
+.familyMarkerLabel {
+  fill: #050608;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.94);
+  stroke-width: 5;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0;
+}
+
+.familyMarkerNativeButton {
+  position: absolute;
+  z-index: 6;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+}
+
+.familyMarkerNativeButton:focus-visible {
+  outline: 4px solid var(--boda-yellow);
+  outline-offset: 4px;
+}
+
+.familyArchiveCard {
+  position: absolute;
+  right: clamp(16px, 3vw, 44px);
+  bottom: clamp(16px, 3vw, 34px);
+  z-index: 4;
+  width: min(410px, calc(100vw - 32px));
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  border-radius: var(--radius);
+  color: #fff;
+  background: rgba(5, 6, 8, 0.84);
+  box-shadow: 0 20px 48px rgba(7, 22, 76, 0.24);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+}
+
+.familyArchiveTabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.familyArchiveTabs button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.72);
+  background: rgba(5, 6, 8, 0.7);
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.familyArchiveTabs button.active {
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.familyArchivePane {
+  padding: 18px;
+}
+
+.familyArchivePane span,
+.familyPersonRow small,
+.familyTimelineRow small {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  border-radius: 999px;
+  padding: 0 9px;
+  color: #111;
+  background: var(--boda-yellow);
+  font-size: 0.72rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.familyArchivePane h2 {
+  margin: 10px 0 5px;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  line-height: 1.04;
+}
+
+.familyArchivePane > strong {
+  display: block;
+  margin-bottom: 9px;
+  color: #dff5e8;
+  font-size: 0.92rem;
+}
+
+.familyArchivePane p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.familyArchivePane a,
+.familyArchivePane > small {
+  display: inline-flex;
+  margin-top: 12px;
+  color: var(--boda-yellow);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.familyScrollList {
+  display: grid;
+  gap: 8px;
+  max-height: min(360px, calc(100vh - 300px));
+  margin-top: 12px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.familyPersonRow,
+.familyTimelineRow,
+.familyTreeBranch {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius);
+  padding: 11px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.familyPersonRow div {
+  display: grid;
+  gap: 3px;
+}
+
+.familyPersonRow strong,
+.familyTimelineRow strong,
+.familyTreeBranch strong {
+  color: #fff;
+  font-size: 0.92rem;
+  line-height: 1.18;
+}
+
+.familyPersonRow em {
+  color: #c9f5df;
+  font-size: 0.74rem;
+  font-style: normal;
+  font-weight: 850;
+}
+
+.familyPersonRow p,
+.familyTimelineRow p,
+.familyTreeBranch p {
+  margin-top: 8px;
+  font-size: 0.82rem;
+}
+
+.familyPersonRow small,
+.familyTimelineRow small,
+.familyTreeBranch small {
+  margin-top: 9px;
+  min-height: 20px;
+  background: rgba(255, 207, 27, 0.9);
+  font-size: 0.64rem;
+}
+
+.familyTimelineRow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.familyTimelineRow time {
+  color: var(--boda-yellow);
+  font-size: 0.78rem;
+  font-weight: 950;
+  line-height: 1.2;
+}
+
+.familyTreeBranch header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.familyTreeBranch header small {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.familyGenerationStack {
+  display: grid;
+  gap: 8px;
+  margin-top: 11px;
+}
+
+.familyGeneration {
+  display: grid;
+  gap: 6px;
+  border-left: 3px solid rgba(255, 207, 27, 0.82);
+  padding-left: 9px;
+}
+
+.familyGeneration em {
+  color: #c9f5df;
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.familyGeneration div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.familyGeneration span {
+  min-height: auto;
+  border-radius: 5px;
+  padding: 5px 7px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.73rem;
+  font-weight: 850;
+  text-transform: none;
+}
+
+.seaLine {
+  stroke: rgba(34, 56, 149, 0.12);
+  stroke-width: 2.5;
+}
+
+.seaLine.two {
+  stroke: rgba(31, 141, 111, 0.16);
+}
+
+.mapMarker {
+  position: absolute;
+  z-index: 3;
+  display: inline-grid;
+  grid-template-columns: 28px auto;
+  align-items: center;
+  gap: 8px;
+  max-width: min(230px, 38%);
+  transform: translate(-14px, -14px);
+  border: 1px solid rgba(7, 22, 76, 0.18);
+  border-radius: 999px;
+  padding: 4px 11px 4px 4px;
+  color: var(--boda-blue-deep);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 12px 28px rgba(7, 22, 76, 0.12);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-align: left;
+  animation: riseIn 520ms ease both;
+  animation-delay: var(--delay);
+}
+
+.mapMarker span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.mapMarker strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mapMarker.active {
+  z-index: 5;
+  color: #fff;
+  background: var(--boda-blue);
+  border-color: var(--boda-blue);
+  transform: translate(-14px, -14px) scale(1.04);
+}
+
+.mapMarker.active span {
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.heroMapCanvas .heroMarker {
+  background: var(--boda-blue);
+}
+
+.heroMapCanvas .heroMarker span {
+  border: 3px solid var(--boda-yellow);
+  color: #fff;
+  background: var(--boda-blue-deep);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+.heroMapCanvas .heroMarker.active span {
+  color: var(--boda-blue-deep);
+  background: var(--boda-yellow);
+}
+
+.audioDock {
+  display: grid;
+  grid-template-columns: minmax(132px, 0.8fr) auto minmax(180px, 1.3fr) auto auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 88px;
+  padding: 14px;
+  border: 1px solid rgba(7, 22, 76, 0.13);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 15px 34px rgba(7, 22, 76, 0.1);
+}
+
+.mapStage > .audioDock {
+  position: relative;
+  z-index: 4;
+}
+
+.audioMeta {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.audioMeta span {
+  color: var(--green);
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.audioMeta strong {
+  overflow: hidden;
+  color: var(--boda-blue-deep);
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roundControl {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--boda-blue-deep);
+  background: #fff;
+}
+
+.roundControl.primary {
+  width: 52px;
+  height: 52px;
+  border: 0;
+  color: #111;
+  background: var(--boda-yellow);
+  box-shadow: 0 11px 24px rgba(255, 207, 27, 0.3);
+}
+
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 46px;
+  min-width: 0;
+}
+
+.waveform i {
+  display: block;
+  width: 4px;
+  height: var(--height);
+  min-height: 9px;
+  border-radius: 999px;
+  background: rgba(34, 56, 149, 0.16);
+  transition: background 160ms ease, height 160ms ease;
+}
+
+.waveform i.active {
+  background: var(--boda-blue);
+}
+
+.timeReadout {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.detailRail {
+  display: grid;
+  grid-template-rows: minmax(420px, 1fr) minmax(180px, 0.52fr);
+  gap: 18px;
+  overflow: hidden;
+}
+
+.mediaPanel,
+.memoryList {
+  border: 1px solid rgba(7, 22, 76, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.mediaPanel {
+  display: grid;
+  grid-template-rows: 190px auto;
+}
+
+.mediaFrame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 190px;
+  background: var(--boda-blue-deep);
+  overflow: hidden;
+}
+
+.mediaFrame img,
+.mediaFrame iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  border: 0;
+  object-fit: cover;
+}
+
+.mediaFrame img {
+  filter: contrast(1.08) saturate(0.96);
+}
+
+.streetViewGate {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  padding: 28px;
+  color: #fff;
+  background:
+    linear-gradient(rgba(7, 22, 76, 0.2), rgba(7, 22, 76, 0.62)),
+    rgba(7, 22, 76, 0.24);
+  text-align: center;
+}
+
+.streetViewGate strong {
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  line-height: 1.05;
+}
+
+.streetViewGate span {
+  max-width: 310px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.streetViewStatus {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  left: 12px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: var(--radius);
+  padding: 10px 11px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.82);
+  box-shadow: 0 12px 28px rgba(7, 22, 76, 0.24);
+  font-size: 0.78rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.streetViewStatus.loading svg {
+  animation: spin 1s linear infinite;
+}
+
+.streetViewStatus span {
+  flex: 1;
+}
+
+.streetViewStatus a {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 6px 9px;
+  color: #111;
+  background: var(--boda-yellow);
+  text-decoration: none;
+  font-size: 0.72rem;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.mediaOverlay {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mediaOverlay span,
+.mediaOverlay button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: var(--radius);
+  padding: 0 10px;
+  color: #fff;
+  background: rgba(7, 22, 76, 0.72);
+  font-size: 0.77rem;
+  font-weight: 900;
+}
+
+.mediaOverlay button {
+  color: #111;
+  background: var(--boda-yellow);
+  border-color: var(--boda-yellow);
+}
+
+.mediaOverlay button:disabled {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(7, 22, 76, 0.72);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.memoryCopy {
+  padding: 20px;
+}
+
+.regionLabel {
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.memoryCopy h2 {
+  margin: 5px 0 6px;
+  color: var(--boda-blue-deep);
+  font-size: clamp(1.6rem, 2.4vw, 2.25rem);
+  line-height: 1.02;
+}
+
+.childSubtitle {
+  display: block;
+  margin: 0 0 10px;
+  color: var(--green);
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.memoryCopy p {
+  margin: 0;
+  color: #26314f;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.tagRow span {
+  border: 1px solid rgba(31, 141, 111, 0.22);
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: #0b5f49;
+  background: var(--green-soft);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.mediaCredit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 15px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.memoryList {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+}
+
+.listHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.listHeader span {
+  color: var(--boda-blue-deep);
+  font-weight: 950;
+}
+
+.listHeader strong {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.memoryRows {
+  display: grid;
+  gap: 1px;
+  min-height: 0;
+  overflow: auto;
+  background: rgba(7, 22, 76, 0.07);
+}
+
+.memoryRow {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  border: 0;
+  padding: 13px 16px;
+  color: var(--boda-blue-deep);
+  background: rgba(255, 255, 255, 0.96);
+  text-align: left;
+}
+
+.memoryRow.active {
+  color: #fff;
+  background: var(--boda-blue);
+}
+
+.rowIndex {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  color: #111;
+  background: var(--boda-yellow);
+  font-size: 0.76rem;
+  font-weight: 950;
+}
+
+.rowText {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.rowText strong,
+.rowText small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.rowText strong {
+  font-size: 0.92rem;
+}
+
+.rowText small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.memoryRow.active .rowText small {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rowDuration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: inherit;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translate(-14px, 2px) scale(0.96);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes introFadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 1120px) {
+  .heroMapStage {
+    grid-template-columns: 1fr;
+    align-content: start;
+  }
+
+  .heroIntro {
+    max-width: 680px;
+  }
+
+  .heroMapCanvas .barbadosMapFrame {
+    width: min(88vw, 640px, calc((100vh - 148px) * 0.7576));
+    transform: rotate(-0.7deg);
+  }
+
+  .experienceShell {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: calc(100vh - 84px);
+  }
+
+  .detailRail {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.8fr);
+    grid-template-rows: auto;
+  }
+
+  .memoryList {
+    max-height: 560px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app {
+    overflow: auto;
+  }
+
+  .appHeader {
+    align-items: flex-start;
+    min-height: auto;
+    flex-direction: column;
+    gap: 14px;
+    overflow: visible;
+  }
+
+  .landingHeader {
+    position: relative;
+  }
+
+  .mapOnlyShell {
+    padding: 52px 14px 14px;
+    min-height: auto;
+  }
+
+  .heroMapStage {
+    min-height: calc(100vh - 170px);
+    padding: 16px;
+    gap: 18px;
+  }
+
+  .heroIntro h1 {
+    max-width: 305px;
+  }
+
+  .heroIntro p {
+    max-width: 305px;
+  }
+
+  .heroMapCanvas {
+    width: 100%;
+    min-height: 620px;
+  }
+
+  .memorialPortraitWash {
+    top: 174px;
+    right: -90px;
+    width: 360px;
+    height: 520px;
+    opacity: 0.12;
+  }
+
+  .bodaGptSticker {
+    top: auto;
+    right: 20px;
+    bottom: 18px;
+    min-width: 154px;
+    padding: 9px 11px 11px;
+    transform: rotate(-2deg);
+  }
+
+  .bodaGptSticker span {
+    font-size: 0.7rem;
+  }
+
+  .bodaGptSticker strong {
+    font-size: 0.9rem;
+  }
+
+  .bodaChatPanel {
+    top: auto;
+    right: 14px;
+    bottom: 96px;
+    left: 14px;
+    width: auto;
+    max-height: min(520px, calc(100vh - 260px));
+  }
+
+  .bodaChatMessages {
+    max-height: 230px;
+  }
+
+  .heroMapCanvas .barbadosMapFrame {
+    width: min(100%, 232px, calc(100vw - 140px));
+    max-width: 100%;
+    aspect-ratio: 500 / 660;
+    height: auto;
+    transform: translate(84px, 204px) rotate(-0.5deg);
+  }
+
+  .heroMapCanvas .barbadosMapFrame::before {
+    inset: -14px -14px -12px;
+    border-radius: 14px;
+  }
+
+  .heroMapCanvas .barbadosMapFrame::after {
+    top: -20px;
+    width: 86px;
+    height: 22px;
+  }
+
+  .portraitMemoryMarker {
+    top: 118px;
+    right: 22px;
+    transform: scale(0.82);
+    transform-origin: top right;
+  }
+
+  .svgMarker .pinLabel {
+    font-size: 10.5px;
+    stroke-width: 4.4;
+  }
+
+  .immersiveTop {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .journeyStops {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .journeyMemoryControls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .sceneGuideButton,
+  .journeyMemoryControls button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .journeyStops button {
+    justify-content: center;
+    width: auto;
+  }
+
+  .backButton,
+  .viewBadge {
+    justify-content: center;
+  }
+
+  .immersiveStatus {
+    top: 250px;
+    right: 14px;
+    left: 14px;
+    flex-wrap: wrap;
+  }
+
+  .immersiveStatus.compact {
+    top: 210px;
+    max-width: none;
+  }
+
+  .immersiveStatus a {
+    width: 100%;
+    text-align: center;
+  }
+
+  .immersiveStory {
+    margin: auto 16px 132px;
+  }
+
+  .sceneGuidePanel {
+    top: 250px;
+    right: 14px;
+    left: 14px;
+    width: auto;
+    max-height: calc(100vh - 388px);
+  }
+
+  .immersiveStory h1 {
+    font-size: clamp(2.1rem, 12vw, 3.4rem);
+  }
+
+  .immersiveAudio {
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .ambientToggle {
+    right: 12px;
+    bottom: 104px;
+    left: auto;
+  }
+
+  .brand {
+    width: 100%;
+    gap: 14px;
+  }
+
+  .brand img {
+    width: 74px;
+    height: 74px;
+    margin-bottom: 0;
+  }
+
+  .titleLockup {
+    display: grid;
+    gap: 4px;
+  }
+
+  .titleLockup em {
+    font-size: 1.15rem;
+  }
+
+  .brand span {
+    min-width: 0;
+  }
+
+  .brand small {
+    max-width: 270px;
+    white-space: normal;
+    line-height: 1.15;
+  }
+
+  .headerNav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    width: 100%;
+  }
+
+  .enter360Nudge {
+    top: calc(100% + 9px);
+    left: 0;
+    width: min(280px, calc(100vw - 36px));
+    padding: 10px 12px;
+    font-size: 0.86rem;
+  }
+
+  .enter360Nudge::before {
+    left: 26px;
+  }
+
+  .enter360Nudge::after {
+    left: 27px;
+  }
+
+  .headerNav a,
+  .navButton,
+  .xrButton,
+  .familyNavButton,
+  .menuButton {
+    min-width: 0;
+    padding: 0 9px;
+    font-size: 0.82rem;
+  }
+
+  .xrButton {
+    grid-column: auto;
+  }
+
+  .stageIntro h1 {
+    font-size: clamp(2.15rem, 12vw, 3.2rem);
+    max-width: 305px;
+  }
+
+  .stageIntro p {
+    font-size: 0.98rem;
+    max-width: 305px;
+  }
+
+  .experienceShell {
+    padding: 14px;
+  }
+
+  .mapStage {
+    padding: 16px;
+  }
+
+  .mapCanvas {
+    min-height: 470px;
+  }
+
+  .barbadosMapFrame {
+    width: 74vw;
+    max-width: 84%;
+    height: 430px;
+  }
+
+  .mediaPanel {
+    grid-template-rows: 260px auto;
+  }
+
+  .mediaFrame,
+  .mediaFrame img,
+  .mediaFrame iframe {
+    min-height: 260px;
+  }
+
+  .mapMarker {
+    grid-template-columns: 28px;
+    max-width: 42px;
+    padding: 4px;
+  }
+
+  .mapMarker strong {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .audioDock {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .audioMeta,
+  .timeReadout {
+    display: none;
+  }
+
+  .waveform {
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .waveform i {
+    width: 2px;
+  }
+
+  .detailRail {
+    grid-template-columns: 1fr;
+  }
+
+  .familyArchiveCard {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .familyArchiveTabs button {
+    min-height: 42px;
+    font-size: 0.76rem;
+  }
+
+  .familyScrollList {
+    max-height: 310px;
+  }
+
+  .familyTimelineRow {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .familyMarkerLabel {
+    font-size: 10px;
+    stroke-width: 4;
+  }
+
+  .mediaOverlay {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mediaOverlay span,
+  .mediaOverlay button {
+    justify-content: center;
+  }
+
+  .memoryRow {
+    grid-template-columns: 34px minmax(0, 1fr);
+  }
+
+  .rowDuration {
+    display: none;
+  }
+}
+
+.immersiveStatus.compact {
+  top: 74px;
+  max-width: 380px;
+  opacity: 0.92;
+}
