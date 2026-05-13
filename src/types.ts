@@ -50,6 +50,7 @@ export type MemoryPoint = {
     credit?: string;
     google?: GoogleStreetView;
     journeyStops?: MemoryJourneyStop[];
+    externalStreetViewUrl?: string;
   };
   familyTags: string[];
 };

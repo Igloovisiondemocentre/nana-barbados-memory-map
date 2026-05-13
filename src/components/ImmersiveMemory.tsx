@@ -17,6 +17,8 @@ type ImmersiveMemoryProps = {
   onClose: () => void;
 };
 
+type MobilePanel = "none" | "story" | "stops" | "guide" | "audio";
+
 export function ImmersiveMemory({
   memory,
   autoPlaySignal,
@@ -30,6 +32,7 @@ export function ImmersiveMemory({
   onClose,
 }: ImmersiveMemoryProps) {
   const [showSceneGuide, setShowSceneGuide] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<MobilePanel>("none");
   const [journeyIndex, setJourneyIndex] = useState(0);
   const hasManualJourneyStopRef = useRef(false);
   const googleMapsKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -50,14 +53,19 @@ export function ImmersiveMemory({
     return [];
   }, [memory]);
   const activeJourneyStop = journeyStops[journeyIndex] ?? journeyStops[0];
+  const savedStreetViewUrl = memory.media.externalStreetViewUrl?.trim() ?? "";
 
   useEffect(() => {
     setShowSceneGuide(false);
+    setMobilePanel("none");
     setJourneyIndex(0);
     hasManualJourneyStopRef.current = false;
   }, [memory.id]);
 
   const streetViewUrl = useMemo(() => {
+    if (savedStreetViewUrl.includes("google.com/maps/embed")) {
+      return savedStreetViewUrl;
+    }
     const google = activeJourneyStop?.google ?? memory.media.google;
     if (!googleMapsKey || !google) {
       return "";
@@ -75,16 +83,19 @@ export function ImmersiveMemory({
       params.set("location", `${lat},${lng}`);
     }
     return `https://www.google.com/maps/embed/v1/streetview?${params.toString()}`;
-  }, [activeJourneyStop, googleMapsKey, memory.media.google]);
+  }, [activeJourneyStop, googleMapsKey, memory.media.google, savedStreetViewUrl]);
 
   const googleMapsUrl = useMemo(() => {
     const google = activeJourneyStop?.google ?? memory.media.google;
+    if (savedStreetViewUrl) {
+      return savedStreetViewUrl;
+    }
     if (!google) {
       return "";
     }
     const { lat, lng } = google;
     return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
-  }, [activeJourneyStop, memory.media.google]);
+  }, [activeJourneyStop, memory.media.google, savedStreetViewUrl]);
 
   const handleAudioProgress = (currentTime: number, duration: number) => {
     if (!duration || journeyStops.length < 2 || hasManualJourneyStopRef.current) {
@@ -93,9 +104,11 @@ export function ImmersiveMemory({
     const nextIndex = currentTime >= duration / 2 ? 1 : 0;
     setJourneyIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
   };
+  const shouldShowStreetViewStatus =
+    !streetViewUrl && (Boolean(savedStreetViewUrl) || Boolean(memory.media.google) || memory.media.kind === "google-street-view");
 
   return (
-    <section className="immersiveMemory" aria-label={`${memory.title} immersive view`}>
+    <section className={`immersiveMemory mobilePanel-${mobilePanel}`} aria-label={`${memory.title} immersive view`}>
       {streetViewUrl ? (
         <iframe
           src={streetViewUrl}
@@ -160,7 +173,10 @@ export function ImmersiveMemory({
           <button
             type="button"
             className={`sceneGuideButton ${showSceneGuide ? "active" : ""}`}
-            onClick={() => setShowSceneGuide((value) => !value)}
+            onClick={() => {
+              setShowSceneGuide((value) => !value);
+              setMobilePanel((panel) => (panel === "guide" ? "none" : "guide"));
+            }}
             aria-expanded={showSceneGuide}
           >
             <BadgeInfo size={16} />
@@ -169,10 +185,57 @@ export function ImmersiveMemory({
         ) : null}
       </div>
 
-      {!streetViewUrl ? (
+      <div className="immersiveMobileTabs" aria-label="360 information panels">
+        <button
+          type="button"
+          className={mobilePanel === "story" ? "active" : ""}
+          onClick={() => setMobilePanel((panel) => (panel === "story" ? "none" : "story"))}
+        >
+          Story
+        </button>
+        {(journeyStops.length > 1 || onPreviousMemory || onNextMemory) ? (
+          <button
+            type="button"
+            className={mobilePanel === "stops" ? "active" : ""}
+            onClick={() => setMobilePanel((panel) => (panel === "stops" ? "none" : "stops"))}
+          >
+            Stops
+          </button>
+        ) : null}
+        <button
+          type="button"
+          className={mobilePanel === "audio" ? "active" : ""}
+          onClick={() => setMobilePanel((panel) => (panel === "audio" ? "none" : "audio"))}
+        >
+          Audio
+        </button>
+        {memory.sceneContext ? (
+          <button
+            type="button"
+            className={mobilePanel === "guide" ? "active" : ""}
+            onClick={() => {
+              setShowSceneGuide(true);
+              setMobilePanel((panel) => (panel === "guide" ? "none" : "guide"));
+            }}
+          >
+            Guide
+          </button>
+        ) : null}
+      </div>
+
+      {shouldShowStreetViewStatus ? (
         <div className="immersiveStatus compact">
           <BadgeInfo size={17} />
-          <span>Street View needs the Google Maps key in the local environment.</span>
+          <span>
+            {savedStreetViewUrl
+              ? "Street View link saved. Open it in Google Maps while this memory stays here."
+              : "Street View needs the Google Maps key in the local environment."}
+          </span>
+          {savedStreetViewUrl ? (
+            <a href={savedStreetViewUrl} target="_blank" rel="noreferrer">
+              Open 360
+            </a>
+          ) : null}
         </div>
       ) : null}
 
@@ -182,6 +245,47 @@ export function ImmersiveMemory({
         <strong>{memory.childSubtitle}</strong>
         <p>{memory.description}</p>
       </div>
+
+      {(journeyStops.length > 1 || onPreviousMemory || onNextMemory) ? (
+        <aside className="mobileStopsPanel" aria-label="Mobile 360 stops">
+          {journeyStep && journeyTotal ? <span>Journey {journeyStep} of {journeyTotal}</span> : null}
+          {onPreviousMemory || onNextMemory ? (
+            <div className="journeyMemoryControls" aria-label="Memory journey controls">
+              <button
+                type="button"
+                onClick={onPreviousMemory}
+                disabled={!hasPreviousMemory}
+                aria-label="Previous memory"
+              >
+                <ChevronLeft size={18} />
+                Previous
+              </button>
+              <button type="button" onClick={onNextMemory} disabled={!hasNextMemory} aria-label="Next memory">
+                Next
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          ) : null}
+          {journeyStops.length > 1 ? (
+            <div className="journeyStops" aria-label="360 journey stops">
+              {journeyStops.map((stop, index) => (
+                <button
+                  key={`${stop.label}-${index}-mobile`}
+                  type="button"
+                  className={index === journeyIndex ? "active" : ""}
+                  onClick={() => {
+                    hasManualJourneyStopRef.current = true;
+                    setJourneyIndex(index);
+                  }}
+                >
+                  <span>{index + 1}</span>
+                  {stop.role}
+                </button>
+              ))}
+            </div>
+          ) : null}
+        </aside>
+      ) : null}
 
       {memory.sceneContext && showSceneGuide ? (
         <aside className="sceneGuidePanel" aria-label={`${memory.title} scene guide`}>

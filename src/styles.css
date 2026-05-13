@@ -95,6 +95,10 @@ button {
   pointer-events: none;
 }
 
+.mobileMemorialTitle {
+  display: none;
+}
+
 .heroDrawing {
   position: absolute;
   inset: 0;
@@ -1038,6 +1042,13 @@ button {
   text-decoration: none;
 }
 
+.brandButton {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  text-align: left;
+}
+
 .brand img {
   width: 104px;
   height: 104px;
@@ -1112,6 +1123,11 @@ button {
 
 .navButton {
   color: rgba(7, 22, 76, 0.52);
+}
+
+.navButton.active {
+  color: #111;
+  background: var(--boda-yellow);
 }
 
 .navButton small {
@@ -2403,6 +2419,325 @@ button {
   font-weight: 900;
 }
 
+.bodaPage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: clamp(18px, 3vw, 32px);
+  min-height: calc(100vh - 108px);
+  padding: clamp(18px, 3vw, 38px);
+  background:
+    linear-gradient(180deg, rgba(237, 244, 251, 0.96), rgba(255, 255, 255, 0.98)),
+    var(--scrapbook-bg) center / cover;
+}
+
+.bodaHero,
+.constitutionGrid,
+.contributionBuilder,
+.userPinsPanel {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.bodaHero {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+  padding: clamp(22px, 4vw, 52px) 0 8px;
+}
+
+.bodaHero div {
+  max-width: 760px;
+}
+
+.bodaHero span,
+.constitutionGrid article span,
+.builderIntro span,
+.userPinsPanel header span,
+.userPinCard span,
+.pinForm label span {
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.bodaHero h1 {
+  margin: 10px 0 12px;
+  color: var(--boda-blue-deep);
+  font-size: clamp(2.35rem, 5vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.bodaHero p,
+.builderIntro p,
+.constitutionGrid p,
+.constitutionGrid li,
+.emptyPins,
+.shareMessage {
+  margin: 0;
+  color: #26314f;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  font-weight: 650;
+  line-height: 1.55;
+}
+
+.constitutionGrid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.2fr 0.95fr;
+  gap: 14px;
+}
+
+.constitutionGrid article,
+.contributionBuilder,
+.userPinsPanel {
+  border: 1px solid rgba(7, 22, 76, 0.12);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 44px rgba(7, 22, 76, 0.08);
+}
+
+.constitutionGrid article {
+  padding: 22px;
+}
+
+.constitutionGrid h2,
+.builderIntro h2,
+.userPinsPanel h2,
+.userPinCard h3 {
+  margin: 8px 0 10px;
+  color: var(--boda-blue-deep);
+  line-height: 1.02;
+  letter-spacing: 0;
+}
+
+.constitutionGrid h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.15rem);
+}
+
+.constitutionGrid ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.contributionBuilder {
+  display: grid;
+  grid-template-columns: 0.65fr 1fr;
+  gap: clamp(18px, 3vw, 32px);
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.builderIntro {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.builderIntro h2,
+.userPinsPanel h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+}
+
+.builderIntro strong {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 9px 12px;
+  color: #111;
+  background: var(--boda-yellow);
+  font-size: 0.9rem;
+  font-weight: 950;
+}
+
+.pinForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pinForm label {
+  display: grid;
+  gap: 6px;
+}
+
+.pinForm .wide,
+.pinError,
+.pinForm > button {
+  grid-column: 1 / -1;
+}
+
+.pinForm input,
+.pinForm select,
+.pinForm textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid rgba(7, 22, 76, 0.16);
+  border-radius: var(--radius);
+  padding: 12px;
+  color: var(--boda-blue-deep);
+  background: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.pinForm textarea {
+  resize: vertical;
+}
+
+.mediaInput {
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border: 1px dashed rgba(7, 22, 76, 0.25);
+  border-radius: var(--radius);
+  color: var(--boda-blue-deep);
+  background: rgba(34, 56, 149, 0.05);
+  font-weight: 950;
+}
+
+.mediaInput input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pinError {
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  color: #fff;
+  background: #9b2929;
+  font-size: 0.85rem;
+}
+
+.pinForm > button,
+.userPinsPanel header button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--radius);
+  color: #111;
+  background: var(--boda-yellow);
+  font-weight: 950;
+}
+
+.pinForm > button:disabled,
+.userPinsPanel header button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.userPinsPanel {
+  display: grid;
+  gap: 16px;
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.userPinsPanel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.userPinList {
+  display: grid;
+  gap: 12px;
+}
+
+.userPinCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) 42px;
+  gap: 14px;
+  border: 1px solid rgba(7, 22, 76, 0.1);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: rgba(237, 244, 251, 0.68);
+}
+
+.userPinCard > img {
+  width: 100%;
+  height: 132px;
+  border-radius: 7px;
+  object-fit: cover;
+}
+
+.userPinCard div {
+  min-width: 0;
+}
+
+.userPinCard h3 {
+  margin-bottom: 4px;
+  font-size: 1.25rem;
+}
+
+.userPinCard strong {
+  display: block;
+  color: var(--green);
+  font-size: 0.9rem;
+}
+
+.userPinCard p {
+  margin: 8px 0 0;
+  color: #26314f;
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.userPinCard small {
+  display: inline-flex;
+  margin-top: 10px;
+  border-radius: 999px;
+  padding: 5px 8px;
+  color: #0b5f49;
+  background: var(--green-soft);
+  font-size: 0.74rem;
+  font-weight: 900;
+}
+
+.pinStreetViewLink {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 10px;
+  color: var(--boda-blue);
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.userPinCard audio {
+  display: block;
+  width: min(100%, 420px);
+  margin-top: 10px;
+}
+
+.userPinCard > button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--boda-blue);
+}
+
+.immersiveMobileTabs,
+.mobileStopsPanel {
+  display: none;
+}
+
 @keyframes riseIn {
   from {
     opacity: 0;
@@ -2471,14 +2806,52 @@ button {
   }
 
   .mapOnlyShell {
-    padding: 52px 14px 14px;
+    padding: 0;
     min-height: auto;
   }
 
   .heroMapStage {
-    min-height: calc(100vh - 170px);
-    padding: 16px;
+    align-content: start;
+    min-height: calc(100svh - 166px);
+    padding: 18px 14px;
     gap: 18px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.64) 40%, rgba(237, 244, 251, 0.76)),
+      var(--mobile-memorial-bg) center top / cover no-repeat;
+  }
+
+  .heroMapStage::before {
+    opacity: 0.18;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(237, 244, 251, 0.42));
+  }
+
+  .mobileMemorialTitle {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    justify-items: center;
+    width: min(100%, 330px);
+    margin: 0 auto;
+    padding-top: 2px;
+    color: rgba(7, 9, 13, 0.8);
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.82);
+    pointer-events: none;
+  }
+
+  .mobileMemorialTitle span {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.88rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .mobileMemorialTitle strong {
+    margin-top: 2px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.75rem, 9vw, 2.5rem);
+    line-height: 0.98;
   }
 
   .heroIntro h1 {
@@ -2491,7 +2864,8 @@ button {
 
   .heroMapCanvas {
     width: 100%;
-    min-height: 620px;
+    min-height: calc(100svh - 235px);
+    place-items: start center;
   }
 
   .memorialPortraitWash {
@@ -2533,11 +2907,11 @@ button {
   }
 
   .heroMapCanvas .barbadosMapFrame {
-    width: min(100%, 232px, calc(100vw - 140px));
+    width: min(78vw, 330px);
     max-width: 100%;
     aspect-ratio: 500 / 660;
     height: auto;
-    transform: translate(84px, 204px) rotate(-0.5deg);
+    transform: translateY(clamp(118px, 21svh, 178px)) rotate(-0.5deg);
   }
 
   .heroMapCanvas .barbadosMapFrame::before {
@@ -2552,9 +2926,10 @@ button {
   }
 
   .portraitMemoryMarker {
-    top: 118px;
-    right: 22px;
-    transform: scale(0.82);
+    top: auto;
+    right: 18px;
+    bottom: 118px;
+    transform: scale(0.78);
     transform-origin: top right;
   }
 
@@ -2563,14 +2938,82 @@ button {
     stroke-width: 4.4;
   }
 
+  .heroMapCanvas .svgMarker:not(.active) .pinLabel,
+  .heroMapCanvas .svgMarker:not(.active) .pinLeader {
+    opacity: 0;
+  }
+
+  .heroMapCanvas .svgMarker.active .pinLabel {
+    font-size: 14px;
+  }
+
   .immersiveTop {
-    align-items: stretch;
-    flex-direction: column;
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    align-items: center;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .immersiveTop > .journeyMemoryControls,
+  .immersiveTop > .journeyStops,
+  .immersiveTop > .sceneGuideButton,
+  .immersiveTop > .journeyBadge {
+    display: none;
+  }
+
+  .immersiveTop .backButton {
+    width: 44px;
+    min-width: 44px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0;
+  }
+
+  .immersiveTop .viewBadge {
+    min-width: 0;
+    max-width: calc(100vw - 74px);
+    min-height: 38px;
+    padding: 0 10px;
+    overflow: hidden;
+    font-size: 0.78rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .immersiveMobileTabs {
+    position: absolute;
+    top: 90px;
+    left: 10px;
+    z-index: 6;
+    display: grid;
+    gap: 8px;
+  }
+
+  .immersiveMobileTabs button {
+    min-width: 54px;
+    min-height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 999px;
+    padding: 0 10px;
+    color: #fff;
+    background: rgba(5, 8, 16, 0.72);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+    font-size: 0.74rem;
+    font-weight: 950;
+    backdrop-filter: blur(12px);
+  }
+
+  .immersiveMobileTabs button.active {
+    color: #111;
+    background: var(--boda-yellow);
+    border-color: var(--boda-yellow);
   }
 
   .journeyStops {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
     margin-left: 0;
     width: 100%;
   }
@@ -2598,14 +3041,16 @@ button {
   }
 
   .immersiveStatus {
-    top: 250px;
+    top: 58px;
     right: 14px;
-    left: 14px;
+    left: 72px;
     flex-wrap: wrap;
+    padding: 9px 10px;
+    font-size: 0.76rem;
   }
 
   .immersiveStatus.compact {
-    top: 210px;
+    top: 58px;
     max-width: none;
   }
 
@@ -2615,32 +3060,94 @@ button {
   }
 
   .immersiveStory {
-    margin: auto 16px 132px;
+    display: none;
+    position: absolute;
+    right: 12px;
+    bottom: 86px;
+    left: 68px;
+    z-index: 5;
+    max-width: none;
+    max-height: 44svh;
+    margin: 0;
+    overflow: auto;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius);
+    padding: 14px;
+    background: rgba(5, 8, 16, 0.82);
+    backdrop-filter: blur(14px);
   }
 
   .sceneGuidePanel {
-    top: 250px;
-    right: 14px;
-    left: 14px;
+    display: none;
+    top: auto;
+    right: 12px;
+    bottom: 86px;
+    left: 68px;
     width: auto;
-    max-height: calc(100vh - 388px);
+    max-height: 54svh;
+    padding: 14px;
+  }
+
+  .mobilePanel-story .immersiveStory,
+  .mobilePanel-guide .sceneGuidePanel {
+    display: grid;
+  }
+
+  .mobileStopsPanel {
+    position: absolute;
+    right: 12px;
+    bottom: 86px;
+    left: 68px;
+    z-index: 5;
+    display: none;
+    gap: 10px;
+    max-height: 48svh;
+    overflow: auto;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: var(--radius);
+    padding: 12px;
+    color: #fff;
+    background: rgba(5, 8, 16, 0.82);
+    backdrop-filter: blur(14px);
+  }
+
+  .mobileStopsPanel > span {
+    color: var(--boda-yellow);
+    font-size: 0.78rem;
+    font-weight: 950;
+    text-transform: uppercase;
+  }
+
+  .mobilePanel-stops .mobileStopsPanel {
+    display: grid;
   }
 
   .immersiveStory h1 {
     font-size: clamp(2.1rem, 12vw, 3.4rem);
+    overflow-wrap: anywhere;
+  }
+
+  .immersiveStory p,
+  .immersiveStory strong {
+    overflow-wrap: anywhere;
   }
 
   .immersiveAudio {
+    display: none;
     right: 12px;
     bottom: 12px;
-    left: 12px;
+    left: 68px;
     grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 64px;
+    padding: 9px;
+  }
+
+  .mobilePanel-audio .immersiveAudio {
+    display: grid;
   }
 
   .ambientToggle {
-    right: 12px;
-    bottom: 104px;
-    left: auto;
+    display: none;
   }
 
   .brand {
@@ -2675,16 +3182,12 @@ button {
 
   .headerNav {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 44px;
     width: 100%;
   }
 
   .enter360Nudge {
-    top: calc(100% + 9px);
-    left: 0;
-    width: min(280px, calc(100vw - 36px));
-    padding: 10px 12px;
-    font-size: 0.86rem;
+    display: none;
   }
 
   .enter360Nudge::before {
@@ -2703,6 +3206,36 @@ button {
     min-width: 0;
     padding: 0 9px;
     font-size: 0.82rem;
+  }
+
+  .menuButton span,
+  .familyNavButton small {
+    display: none;
+  }
+
+  .bodaPage {
+    padding: 18px 14px 28px;
+  }
+
+  .bodaHero,
+  .userPinsPanel header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .constitutionGrid,
+  .contributionBuilder,
+  .pinForm {
+    grid-template-columns: 1fr;
+  }
+
+  .userPinCard {
+    grid-template-columns: minmax(0, 1fr) 42px;
+  }
+
+  .userPinCard > img {
+    grid-column: 1 / -1;
+    height: 190px;
   }
 
   .xrButton {
@@ -2827,6 +3360,38 @@ button {
 
   .rowDuration {
     display: none;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  .mapOnlyShell {
+    min-height: auto;
+  }
+
+  .heroMapStage {
+    min-height: calc(100svh - 92px);
+    padding: 10px 18px;
+    background: var(--scrapbook-bg) center center / cover;
+  }
+
+  .mobileMemorialTitle {
+    display: none;
+  }
+
+  .heroMapCanvas {
+    min-height: calc(100svh - 112px);
+    place-items: center;
+  }
+
+  .heroMapCanvas .barbadosMapFrame {
+    width: min(38vw, 270px, calc((100svh - 116px) * 0.72));
+    transform: translate(-2vw, 0) rotate(-0.6deg);
+  }
+
+  .portraitMemoryMarker {
+    top: 24px;
+    right: 32px;
+    bottom: auto;
   }
 }
 
