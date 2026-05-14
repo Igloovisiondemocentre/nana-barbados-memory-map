@@ -81,7 +81,7 @@ export function AudioPlayer({ memory, autoPlaySignal = 0, mode = "dock", onProgr
     <div className={mode === "immersive" ? "audioDock immersiveAudio" : "audioDock"}>
       <audio
         ref={audioRef}
-        src={memory.audioSrc}
+        src={memory.audioSrc || undefined}
         preload="metadata"
         onLoadedMetadata={(event) => {
           setDuration(event.currentTarget.duration);

@@ -99,6 +99,10 @@ button {
   display: none;
 }
 
+.mobileMemorialPortrait {
+  display: none;
+}
+
 .heroDrawing {
   position: absolute;
   inset: 0;
@@ -1099,6 +1103,42 @@ button {
   justify-content: flex-end;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.headerMenu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 40;
+  display: grid;
+  gap: 4px;
+  width: min(260px, calc(100vw - 32px));
+  border: 1px solid rgba(7, 22, 76, 0.18);
+  border-radius: var(--radius);
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 44px rgba(7, 22, 76, 0.22);
+}
+
+.headerMenu button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 11px;
+  color: var(--boda-blue-deep);
+  background: transparent;
+  font-size: 0.92rem;
+  font-weight: 950;
+  text-align: left;
+}
+
+.headerMenu button:hover,
+.headerMenu button:focus-visible,
+.headerMenu button.active {
+  background: rgba(255, 207, 27, 0.28);
 }
 
 .headerNav a,
@@ -2526,7 +2566,8 @@ button {
 
 .contributionBuilder {
   display: grid;
-  grid-template-columns: 0.65fr 1fr;
+  grid-template-columns: 0.68fr 0.78fr 1fr;
+  align-items: start;
   gap: clamp(18px, 3vw, 32px);
   padding: clamp(18px, 3vw, 28px);
 }
@@ -2549,6 +2590,68 @@ button {
   color: #111;
   background: var(--boda-yellow);
   font-size: 0.9rem;
+  font-weight: 950;
+}
+
+.pinPlacePicker {
+  display: grid;
+  gap: 10px;
+}
+
+.pinPickerMap {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid rgba(7, 22, 76, 0.14);
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 48% 48%, rgba(91, 179, 205, 0.16), transparent 58%),
+    rgba(237, 244, 251, 0.88);
+  touch-action: none;
+  user-select: none;
+}
+
+.pinPickerMap img {
+  position: absolute;
+  inset: 6% -18% 4%;
+  width: 136%;
+  height: 90%;
+  object-fit: fill;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.draftMemoryPin {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 4px solid #fff;
+  border-radius: 999px 999px 999px 12px;
+  color: var(--boda-blue-deep);
+  background: var(--boda-yellow);
+  box-shadow:
+    0 12px 22px rgba(7, 22, 76, 0.28),
+    0 0 0 8px rgba(255, 207, 27, 0.22);
+  transform: translate(-50%, -82%) rotate(-45deg);
+}
+
+.draftMemoryPin svg {
+  transform: rotate(45deg);
+}
+
+.pinPlacePicker p {
+  margin: 0;
+  color: #26314f;
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.pinPlacePicker a {
+  color: var(--boda-blue);
   font-weight: 950;
 }
 
@@ -2811,13 +2914,16 @@ button {
   }
 
   .heroMapStage {
+    display: grid;
+    grid-template-columns: minmax(112px, 0.42fr) minmax(0, 0.58fr);
+    grid-template-rows: auto minmax(0, 1fr);
     align-content: start;
     min-height: calc(100svh - 166px);
     padding: 18px 14px;
-    gap: 18px;
+    gap: 12px;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.64) 40%, rgba(237, 244, 251, 0.76)),
-      var(--mobile-memorial-bg) center top / cover no-repeat;
+      linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.76) 42%, rgba(237, 244, 251, 0.86)),
+      var(--scrapbook-bg) center center / cover no-repeat;
   }
 
   .heroMapStage::before {
@@ -2828,6 +2934,8 @@ button {
   .mobileMemorialTitle {
     position: relative;
     z-index: 3;
+    grid-column: 1 / -1;
+    grid-row: 1;
     display: grid;
     justify-items: center;
     width: min(100%, 330px);
@@ -2854,6 +2962,25 @@ button {
     line-height: 0.98;
   }
 
+  .mobileMemorialPortrait {
+    position: relative;
+    z-index: 2;
+    display: block;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: start;
+    width: 100%;
+    max-height: calc(100svh - 286px);
+    min-height: 255px;
+    border: 1px solid rgba(143, 118, 178, 0.24);
+    border-radius: 7px;
+    box-shadow: 0 18px 38px rgba(7, 22, 76, 0.12);
+    filter: saturate(0.72) contrast(0.96);
+    opacity: 0.76;
+    object-fit: cover;
+    object-position: 42% top;
+  }
+
   .heroIntro h1 {
     max-width: 305px;
   }
@@ -2863,9 +2990,12 @@ button {
   }
 
   .heroMapCanvas {
+    grid-column: 2;
+    grid-row: 2;
     width: 100%;
-    min-height: calc(100svh - 235px);
+    min-height: calc(100svh - 270px);
     place-items: start center;
+    overflow: visible;
   }
 
   .memorialPortraitWash {
@@ -2907,11 +3037,11 @@ button {
   }
 
   .heroMapCanvas .barbadosMapFrame {
-    width: min(78vw, 330px);
+    width: min(55vw, 235px);
     max-width: 100%;
     aspect-ratio: 500 / 660;
     height: auto;
-    transform: translateY(clamp(118px, 21svh, 178px)) rotate(-0.5deg);
+    transform: translateY(8px) rotate(-0.5deg);
   }
 
   .heroMapCanvas .barbadosMapFrame::before {
@@ -3182,7 +3312,7 @@ button {
 
   .headerNav {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr) 58px;
     width: 100%;
   }
 
@@ -3227,6 +3357,10 @@ button {
   .contributionBuilder,
   .pinForm {
     grid-template-columns: 1fr;
+  }
+
+  .pinPickerMap {
+    min-height: 320px;
   }
 
   .userPinCard {
@@ -3375,6 +3509,10 @@ button {
   }
 
   .mobileMemorialTitle {
+    display: none;
+  }
+
+  .mobileMemorialPortrait {
     display: none;
   }
 

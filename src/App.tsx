@@ -1,4 +1,4 @@
-import { type CSSProperties, type FormEvent, useEffect, useMemo, useState } from "react";
+import { type CSSProperties, type FormEvent, type PointerEvent, useEffect, useMemo, useState } from "react";
 import {
   Camera,
   Gamepad2,
@@ -54,7 +54,7 @@ type ChatMessage = {
   content: string;
 };
 
-type AppPage = "map" | "boda";
+type AppPage = "map" | "boda" | "contribute";
 
 type UserPin = {
   id: string;
@@ -85,6 +85,26 @@ const parishOptions = [
   { name: "Saint John", x: 81, y: 65 },
 ];
 
+const barbadosBounds = {
+  north: 13.35,
+  south: 13.04,
+  west: -59.66,
+  east: -59.42,
+};
+
+const getNearestParish = (position: { x: number; y: number }) =>
+  parishOptions.reduce((nearest, parish) => {
+    const currentDistance = Math.hypot(position.x - parish.x, position.y - parish.y);
+    const nearestDistance = Math.hypot(position.x - nearest.x, position.y - nearest.y);
+    return currentDistance < nearestDistance ? parish : nearest;
+  }, parishOptions[0]);
+
+const streetViewUrlFromPosition = (position: { x: number; y: number }) => {
+  const lat = barbadosBounds.north - (position.y / 100) * (barbadosBounds.north - barbadosBounds.south);
+  const lng = barbadosBounds.west + (position.x / 100) * (barbadosBounds.east - barbadosBounds.west);
+  return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat.toFixed(5)},${lng.toFixed(5)}`;
+};
+
 const journeyMemories = immersiveJourneyIds
   .map((id) => memories.find((memory) => memory.id === id))
   .filter((memory): memory is (typeof memories)[number] => Boolean(memory));
@@ -102,7 +122,16 @@ const readFileAsDataUrl = (file: File | null) =>
   });
 
 export default function App() {
-  const [page, setPage] = useState<AppPage>(() => (window.location.hash === "#boda" ? "boda" : "map"));
+  const [page, setPage] = useState<AppPage>(() => {
+    if (window.location.hash === "#boda") {
+      return "boda";
+    }
+    if (window.location.hash === "#contribute") {
+      return "contribute";
+    }
+    return "map";
+  });
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState(memories[0].id);
   const [immersiveId, setImmersiveId] = useState<string | null>(null);
   const [autoPlaySignal, setAutoPlaySignal] = useState(0);
@@ -127,6 +156,7 @@ export default function App() {
   });
   const [pinError, setPinError] = useState("");
   const [shareMessage, setShareMessage] = useState("");
+  const [draftMapPosition, setDraftMapPosition] = useState({ x: 47, y: 58 });
   const [familyLayerVisible, setFamilyLayerVisible] = useState(() => {
     const params = new URLSearchParams(window.location.search);
     return params.get("family") === "1";
@@ -202,11 +232,23 @@ export default function App() {
   }, [userPins]);
 
   useEffect(() => {
-    const nextHash = page === "boda" ? "#boda" : "#map";
+    const nextHash = page === "boda" ? "#boda" : page === "contribute" ? "#contribute" : "#map";
     if (window.location.hash !== nextHash) {
       window.history.replaceState(null, "", nextHash);
     }
   }, [page]);
+
+  const navigateToPage = (nextPage: AppPage) => {
+    setPage(nextPage);
+    setMenuOpen(false);
+  };
+
+  const updateDraftMapPosition = (event: PointerEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = Math.min(92, Math.max(8, ((event.clientX - rect.left) / rect.width) * 100));
+    const y = Math.min(94, Math.max(6, ((event.clientY - rect.top) / rect.height) * 100));
+    setDraftMapPosition({ x, y });
+  };
 
   const openMemory = (id: string) => {
     setJourneyModeActive(false);
@@ -266,17 +308,16 @@ export default function App() {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const title = String(formData.get("title") ?? "").trim();
-    const parish = String(formData.get("parish") ?? parishOptions[0].name);
-    const village = String(formData.get("village") ?? "").trim();
+    const parish = getNearestParish(draftMapPosition).name;
+    const placeNote = String(formData.get("placeNote") ?? "").trim();
     const story = String(formData.get("story") ?? "").trim();
     const tags = String(formData.get("tags") ?? "").trim();
-    const streetViewUrl = String(formData.get("streetViewUrl") ?? "").trim();
+    const streetViewUrl = streetViewUrlFromPosition(draftMapPosition);
     const photoFile = formData.get("photo");
     const audioFile = formData.get("audio");
-    const parishPoint = parishOptions.find((item) => item.name === parish) ?? parishOptions[0];
 
-    if (!title || !village || !story) {
-      setPinError("Add a title, village and memory before saving the pin.");
+    if (!title || !story) {
+      setPinError("Add a title and memory before saving the pin.");
       return;
     }
 
@@ -292,21 +333,19 @@ export default function App() {
           id,
           title,
           parish,
-          village,
+          village: placeNote || `Dropped pin near ${parish}`,
           story,
           tags,
           streetViewUrl,
           photoSrc,
           audioSrc,
-          mapPosition: {
-            x: parishPoint.x + Math.min(userPins.length, 4) * 1.2,
-            y: parishPoint.y + (userPins.length % 2 === 0 ? 0 : 2),
-          },
+          mapPosition: draftMapPosition,
         },
       ]);
       setPinError("");
       setActiveId(id);
       setFamilyLayerVisible(false);
+      setPage("map");
       form.reset();
     } catch {
       setPinError("The media file could not be read. Try a smaller photo or audio clip.");
@@ -373,6 +412,9 @@ export default function App() {
     }
   };
 
+  const draftParish = getNearestParish(draftMapPosition);
+  const draftStreetViewUrl = streetViewUrlFromPosition(draftMapPosition);
+
   return (
     <div
       className="app"
@@ -394,10 +436,6 @@ export default function App() {
           </span>
         </button>
         <nav className="headerNav landingNav" aria-label="Primary">
-          <button type="button" className={`navButton ${page === "boda" ? "active" : ""}`} onClick={() => setPage("boda")}>
-            <MapPinned size={21} />
-            <span>BODA</span>
-          </button>
           <button type="button" className="xrButton" onClick={startImmersiveJourney}>
             <Gamepad2 size={22} />
             <span>Enter 360</span>
@@ -409,25 +447,44 @@ export default function App() {
           ) : null}
           <button
             type="button"
-            className={`familyNavButton ${familyLayerVisible ? "active" : ""}`}
-            aria-pressed={familyLayerVisible}
-            onClick={() => {
-              setFamilyLayerVisible((visible) => {
-                const nextVisible = !visible;
-                if (!nextVisible) {
-                  setSelectedFamilyPointId(null);
-                }
-                return nextVisible;
-              });
-            }}
+            className={`menuButton ${menuOpen ? "active" : ""}`}
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
           >
-            <Users size={22} />
-            <span>Family Layer</span>
-            <small>Beta</small>
-          </button>
-          <button type="button" className="menuButton" aria-label="Open menu">
             <Menu size={32} />
           </button>
+          {menuOpen ? (
+            <div className="headerMenu" role="menu">
+              <button type="button" role="menuitem" onClick={() => navigateToPage("boda")}>
+                <MapPinned size={18} />
+                About BODA
+              </button>
+              <button type="button" role="menuitem" onClick={() => navigateToPage("contribute")}>
+                <Plus size={18} />
+                Add your pin
+              </button>
+              <button
+                type="button"
+                role="menuitem"
+                className={familyLayerVisible ? "active" : ""}
+                onClick={() => {
+                  setFamilyLayerVisible((visible) => {
+                    const nextVisible = !visible;
+                    if (!nextVisible) {
+                      setSelectedFamilyPointId(null);
+                    }
+                    return nextVisible;
+                  });
+                  setMenuOpen(false);
+                  setPage("map");
+                }}
+              >
+                <Users size={18} />
+                Family layer {familyLayerVisible ? "on" : "off"}
+              </button>
+            </div>
+          ) : null}
         </nav>
       </header>
 
@@ -438,6 +495,12 @@ export default function App() {
             <span>In Loving Memory</span>
             <strong>Meg Goodman</strong>
           </div>
+          <img
+            className="mobileMemorialPortrait"
+            src={assetPath("assets/memorial/meg-goodman-mobile-background.png")}
+            alt=""
+            aria-hidden="true"
+          />
           <div className="heroDrawing" aria-hidden="true" />
           <img
             className="memorialPortraitWash"
@@ -526,98 +589,160 @@ export default function App() {
           ) : null}
         </section>
       </main>
-      ) : (
+      ) : page === "boda" ? (
         <main className="bodaPage" id="boda">
           <section className="bodaHero">
             <div>
-              <span>BODA Constitution</span>
-              <h1>Heritage is something young people can add to, not just observe.</h1>
+              <span>About BODA</span>
+              <h1>Barbados Overseas Descendants Association</h1>
               <p>
-                This page connects Nana's Barbados to BODA's wider aim: helping families document parish,
-                village, voice, images and memory as living heritage.
+                The constitution sets out BODA's name, charitable aims, membership, officers,
+                committee powers, finance rules and governance procedures.
               </p>
             </div>
-            <button type="button" className="xrButton" onClick={() => setPage("map")}>
-              <MapPinned size={20} />
-              View the map
+            <button type="button" className="xrButton" onClick={() => navigateToPage("contribute")}>
+              <Plus size={20} />
+              Add your pin
             </button>
           </section>
 
           <section className="constitutionGrid" aria-label="BODA constitution and aims">
             <article>
-              <span>Constitution holder</span>
-              <h2>Purpose</h2>
-              <p>
-                BODA exists to connect Barbadian family memory with place: parish, village, story,
-                archive, audio and photographs.
-              </p>
+              <span>Name</span>
+              <h2>Barbados Overseas Descendants Association</h2>
+              <p>The Association will be known as Barbados Overseas Descendants Association (BODA).</p>
             </article>
             <article>
-              <span>Aims</span>
-              <h2>What this web app should make possible</h2>
+              <span>Aims and objectives</span>
+              <h2>Culture, health, mentoring and community cohesion</h2>
               <ul>
-                <li>Let visitors identify their parish and tag a family village.</li>
-                <li>Let families add pictures, audio, written memories and context.</li>
-                <li>Keep Nana's story intact while opening a path for other families to contribute.</li>
-                <li>Limit early personal maps to five pins so the experience stays readable.</li>
+                <li>Promote awareness of Barbadian cultural traditions, customs, festivals and arts, especially among children and young people.</li>
+                <li>Advance public education in healthy living and healthy lifestyles.</li>
+                <li>Offer coaching and mentoring opportunities to the community.</li>
+                <li>Relieve hardship, sickness, poor health and isolation in Croydon, Lambeth, Lewisham, Wandsworth and surrounding areas.</li>
+                <li>Promote community cohesion by involving all members of the community in activities.</li>
               </ul>
             </article>
             <article>
-              <span>Participation model</span>
-              <h2>From visitor to contributor</h2>
+              <span>Principles</span>
+              <h2>Non-profit, non-partisan and inclusive</h2>
               <p>
-                Someone can read Nana's story, then begin their own small memory layer. The first version
-                saves this on the device and shows those pins as a personal family layer.
+                BODA is non-partisan in politics, non-sectarian in beliefs and non-profit in its work.
+                It works for the elimination of discrimination on the basis of race, gender, age,
+                sexuality, disability and religious beliefs.
+              </p>
+            </article>
+            <article>
+              <span>Membership</span>
+              <h2>Full and associate members</h2>
+              <p>
+                Full membership is open to Barbadians and their descendants. Associate membership is open
+                to those with sympathetic views of BODA's aims and objectives, sponsored by a full member.
+              </p>
+            </article>
+            <article>
+              <span>Officers and powers</span>
+              <h2>Annual officers and lawful powers</h2>
+              <p>
+                Members elect officers at the AGM, including Chair, Deputy Chair, Secretary, Treasurer
+                and any other relevant position. BODA may raise money, open bank accounts, insure,
+                employ staff, manage property, organise courses and events, and work with other groups.
+              </p>
+            </article>
+            <article>
+              <span>Governance</span>
+              <h2>Committee, finance and meetings</h2>
+              <p>
+                The committee keeps minutes, meets at least four times a year including the AGM, manages
+                finances through the Treasurer, presents audited accounts, and handles discipline,
+                appeals, constitutional amendments and dissolution through the procedures set out in the constitution.
+              </p>
+            </article>
+            <article>
+              <span>Finance</span>
+              <h2>Funds are held for BODA's work</h2>
+              <p>
+                Funds may be raised through subscriptions, donations, raffles and fundraising. The Treasurer
+                keeps financial records, pays approved expenses, and presents accounts for audit or independent examination.
+              </p>
+            </article>
+            <article>
+              <span>Meetings</span>
+              <h2>Members shape the association</h2>
+              <p>
+                The AGM receives accounts and elects officers. Members can nominate officers in advance,
+                vote where posts are contested, and call extraordinary meetings through the constitution's rules.
+              </p>
+            </article>
+            <article>
+              <span>Discipline and changes</span>
+              <h2>Fair process and member approval</h2>
+              <p>
+                The constitution includes notice, appeals and voting procedures for discipline, amendments,
+                and dissolution, so decisions are handled transparently by the committee and members.
               </p>
             </article>
           </section>
-
+        </main>
+      ) : (
+        <main className="bodaPage contributePage" id="contribute">
           <section className="contributionBuilder" aria-label="Create your BODA family pins">
             <div className="builderIntro">
-              <span>Your family layer</span>
-              <h2>Add up to 5 personal pins</h2>
+              <span>Add to the memory map</span>
+              <h2>Drop a pin where your memory belongs</h2>
               <p>
-                Add the same kind of information a 360 memory needs: place, village, story, picture,
-                Street View point, voice note and tags. These pins stay local for now.
+                Tap or drag the pin on Barbados, then add the memory details. The app will create a
+                nearby Google Street View point from the position you choose.
               </p>
               <strong>{userPins.length}/5 pins used</strong>
             </div>
 
+            <div className="pinPlacePicker">
+              <div
+                className="pinPickerMap"
+                role="application"
+                aria-label="Choose where this memory belongs on the Barbados map"
+                onPointerDown={(event) => {
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                  updateDraftMapPosition(event);
+                }}
+                onPointerMove={(event) => {
+                  if (event.buttons === 1) {
+                    updateDraftMapPosition(event);
+                  }
+                }}
+              >
+                <img src={assetPath("assets/images/barbados-scrapbook-map-sticker.png")} alt="" aria-hidden="true" />
+                <span
+                  className="draftMemoryPin"
+                  style={{ left: `${draftMapPosition.x}%`, top: `${draftMapPosition.y}%` }}
+                  aria-hidden="true"
+                >
+                  <MapPinned size={18} />
+                </span>
+              </div>
+              <p>
+                Selected near <strong>{draftParish.name}</strong>. Street View point:
+                <a href={draftStreetViewUrl} target="_blank" rel="noreferrer"> open preview</a>
+              </p>
+            </div>
+
             <form className="pinForm" onSubmit={addUserPin}>
               <label>
-                <span>Memory title</span>
-                <input name="title" maxLength={80} placeholder="Grandad's fishing story" />
+                <span>Whose memory is this?</span>
+                <input name="title" maxLength={80} placeholder="Auntie June's Speightstown memory" />
               </label>
               <label>
-                <span>Parish</span>
-                <select name="parish" defaultValue={parishOptions[0].name}>
-                  {parishOptions.map((parish) => (
-                    <option key={parish.name} value={parish.name}>
-                      {parish.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span>Family village</span>
-                <input name="village" maxLength={70} placeholder="The Gap, Speightstown..." />
+                <span>Place note</span>
+                <input name="placeNote" maxLength={70} placeholder="Family village, road, school, church..." />
               </label>
               <label>
                 <span>Tags</span>
                 <input name="tags" maxLength={90} placeholder="food, school, church, migration" />
               </label>
               <label className="wide">
-                <span>Google Street View link</span>
-                <input
-                  name="streetViewUrl"
-                  type="url"
-                  inputMode="url"
-                  placeholder="Paste a Google Street View or Maps link"
-                />
-              </label>
-              <label className="wide">
-                <span>Memory / context</span>
-                <textarea name="story" rows={5} maxLength={600} placeholder="What happened here? Who told you? Why does it matter?" />
+                <span>What should people know?</span>
+                <textarea name="story" rows={5} maxLength={600} placeholder="What happened here? Who told you? Why does this place matter?" />
               </label>
               <label className="mediaInput">
                 <Camera size={18} />
@@ -632,7 +757,7 @@ export default function App() {
               {pinError ? <strong className="pinError">{pinError}</strong> : null}
               <button type="submit" disabled={userPins.length >= 5}>
                 <Plus size={18} />
-                Add pin
+                Add to memory map
               </button>
             </form>
           </section>
