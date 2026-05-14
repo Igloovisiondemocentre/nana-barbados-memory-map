@@ -20,6 +20,7 @@ import { familyPoints } from "./data/familyPoints";
 import { memories } from "./data/memories";
 import type { MemoryPoint } from "./types";
 import { assetPath } from "./utils/assets";
+import { getLocalBodaChatReply } from "./utils/bodaChat";
 
 const userPinsStorageKey = "bodaUserPins";
 
@@ -388,9 +389,18 @@ export default function App() {
     setChatError("");
     setChatLoading(true);
 
+    const answerFromLocalGuide = () =>
+      getLocalBodaChatReply(content, {
+        memories: allMemories,
+        userPinCount: userPins.length,
+        activeMemory,
+        page,
+      });
+
     try {
       if (!bodaChatEndpoint) {
-        throw new Error("Embedded chat needs an API backend. Use the full BODA GPT link for now.");
+        setChatMessages((messages) => [...messages, { role: "assistant", content: answerFromLocalGuide() }]);
+        return;
       }
 
       const response = await fetch(bodaChatEndpoint, {
@@ -405,8 +415,9 @@ export default function App() {
       }
 
       setChatMessages((messages) => [...messages, { role: "assistant", content: body.reply }]);
-    } catch (error) {
-      setChatError(error instanceof Error ? error.message : "Chat is not available yet.");
+    } catch {
+      setChatMessages((messages) => [...messages, { role: "assistant", content: answerFromLocalGuide() }]);
+      setChatError("");
     } finally {
       setChatLoading(false);
     }
