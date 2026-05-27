@@ -2,6 +2,71 @@ import type { FamilyPoint } from "../types";
 
 export const familyPoints: FamilyPoint[] = [
   {
+    id: "hillaby-archie-goodman",
+    title: "Archie Goodman and the Hillaby Song",
+    shortLabel: "Archie Goodman",
+    place: "Hillaby, St. Andrew",
+    confidence: "Medium",
+    category: "family",
+    mapPosition: { x: 50.2, y: 38.8 },
+    labelOffset: { x: 42, y: -28, anchor: "start" },
+    summary:
+      "Family archive material links Hillaby with Iris Goodman / Iris Greenidge, the unresolved disappearance of her father Archie or Archibald Goodman, and later folk-song material warning 'Yuh betta do good'. This is a family-memory and research pin: important, emotional and still unresolved.",
+    sourceLabel: "Family archive photos 20260525_231009, 20260525_234407 and 20260525_234411",
+  },
+  {
+    id: "iris-goodman-hillaby",
+    title: "Iris Goodman Birthplace",
+    shortLabel: "Iris Hillaby",
+    place: "Hillaby, St. Andrew",
+    confidence: "High",
+    category: "family",
+    mapPosition: { x: 46.6, y: 41.6 },
+    labelOffset: { x: -42, y: 18, anchor: "end" },
+    summary:
+      "The family archive article identifies Iris Goodman, later Iris Greenidge, as born on 30 June 1913 at Hillaby, St. Andrew. Her story gives the family a clear Barbados place anchor before the schooling, teaching and unresolved Goodman history unfold.",
+    sourceLabel: "Family archive newspaper photos 20260525_231006 and 20260525_231009",
+  },
+  {
+    id: "turners-hall-iris-school",
+    title: "Iris at Turners Hall",
+    shortLabel: "Turners Hall",
+    place: "Turners Hall, St. Andrew",
+    confidence: "High",
+    category: "family",
+    mapPosition: { x: 54.6, y: 44.5 },
+    labelOffset: { x: 42, y: 18, anchor: "start" },
+    summary:
+      "Iris Goodman is recorded as attending Turners Hall Primary School before later schooling elsewhere. This pin keeps her childhood education attached to the St. Andrew landscape rather than flattening it into one generic family point.",
+    sourceLabel: "Family archive newspaper photos 20260525_231006 and 20260525_231009",
+  },
+  {
+    id: "queens-college-iris",
+    title: "Queen's College and Spooners Hill",
+    shortLabel: "Queen's College",
+    place: "Queen's College / Ocean View Road off Spooners Hill, St. Michael",
+    confidence: "High",
+    category: "family",
+    mapPosition: { x: 24.5, y: 76.3 },
+    labelOffset: { x: 42, y: -26, anchor: "start" },
+    summary:
+      "The Iris Goodman article says her father sent her to Queen's College in 1926 and that she boarded on Ocean View Road, off Spooners Hill, with his cousin Mrs. Agard. This is a major family education and migration-within-Barbados memory.",
+    sourceLabel: "Family archive newspaper photos 20260525_231006 and 20260525_231009",
+  },
+  {
+    id: "st-andrew-church-research",
+    title: "St. Andrew Disappearance Research Lead",
+    shortLabel: "St. Andrew Lead",
+    place: "St. Andrew church / Turners Hill area",
+    confidence: "Low",
+    category: "records",
+    mapPosition: { x: 58.8, y: 36.6 },
+    labelOffset: { x: 42, y: -8, anchor: "start" },
+    summary:
+      "The newspaper material around Archie Goodman's disappearance includes unresolved references to St. Andrew, Turners Hill and possible local investigation. This pin is deliberately marked low confidence because it is a research lead, not a settled location.",
+    sourceLabel: "Family archive newspaper photos 20260525_231006 and 20260525_231009",
+  },
+  {
     id: "rowans-park",
     title: "Meg and Annette Rowans Link",
     shortLabel: "Rowans Link",

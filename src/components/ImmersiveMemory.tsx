@@ -53,7 +53,10 @@ export function ImmersiveMemory({
     return [];
   }, [memory]);
   const activeJourneyStop = journeyStops[journeyIndex] ?? journeyStops[0];
+  const activeStopImageSrc = activeJourneyStop?.imageSrc;
+  const activeStopImageAlt = activeJourneyStop?.imageAlt ?? memory.media.alt;
   const savedStreetViewUrl = memory.media.externalStreetViewUrl?.trim() ?? "";
+  const activeExternalStreetViewUrl = activeJourneyStop?.externalStreetViewUrl?.trim() ?? "";
 
   useEffect(() => {
     setShowSceneGuide(false);
@@ -63,6 +66,9 @@ export function ImmersiveMemory({
   }, [memory.id]);
 
   const streetViewUrl = useMemo(() => {
+    if (activeStopImageSrc) {
+      return "";
+    }
     if (savedStreetViewUrl.includes("google.com/maps/embed")) {
       return savedStreetViewUrl;
     }
@@ -83,10 +89,13 @@ export function ImmersiveMemory({
       params.set("location", `${lat},${lng}`);
     }
     return `https://www.google.com/maps/embed/v1/streetview?${params.toString()}`;
-  }, [activeJourneyStop, googleMapsKey, memory.media.google, savedStreetViewUrl]);
+  }, [activeJourneyStop, activeStopImageSrc, googleMapsKey, memory.media.google, savedStreetViewUrl]);
 
   const googleMapsUrl = useMemo(() => {
     const google = activeJourneyStop?.google ?? memory.media.google;
+    if (activeExternalStreetViewUrl) {
+      return activeExternalStreetViewUrl;
+    }
     if (savedStreetViewUrl) {
       return savedStreetViewUrl;
     }
@@ -95,7 +104,7 @@ export function ImmersiveMemory({
     }
     const { lat, lng } = google;
     return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
-  }, [activeJourneyStop, memory.media.google, savedStreetViewUrl]);
+  }, [activeExternalStreetViewUrl, activeJourneyStop, memory.media.google, savedStreetViewUrl]);
 
   const handleAudioProgress = (currentTime: number, duration: number) => {
     if (!duration || journeyStops.length < 2 || hasManualJourneyStopRef.current) {
@@ -105,7 +114,13 @@ export function ImmersiveMemory({
     setJourneyIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
   };
   const shouldShowStreetViewStatus =
-    !streetViewUrl && (Boolean(savedStreetViewUrl) || Boolean(memory.media.google) || memory.media.kind === "google-street-view");
+    !streetViewUrl &&
+    !activeStopImageSrc &&
+    (Boolean(activeExternalStreetViewUrl) ||
+      Boolean(savedStreetViewUrl) ||
+      Boolean(activeJourneyStop?.google) ||
+      Boolean(memory.media.google) ||
+      memory.media.kind === "google-street-view");
 
   return (
     <section className={`immersiveMemory mobilePanel-${mobilePanel}`} aria-label={`${memory.title} immersive view`}>
@@ -117,7 +132,7 @@ export function ImmersiveMemory({
           allowFullScreen
         />
       ) : (
-        <img src={memory.media.src} alt={memory.media.alt} />
+        <img src={activeStopImageSrc ?? memory.media.src} alt={activeStopImageAlt} />
       )}
 
       <div className="immersiveTop">
@@ -162,11 +177,12 @@ export function ImmersiveMemory({
                   hasManualJourneyStopRef.current = true;
                   setJourneyIndex(index);
                 }}
-              >
-                <span>{index + 1}</span>
-                {stop.role}
-              </button>
-            ))}
+                >
+                  <span>{index + 1}</span>
+                  <strong>{stop.label}</strong>
+                  <small>{stop.role}</small>
+                </button>
+              ))}
           </div>
         ) : null}
         {memory.sceneContext ? (
@@ -277,11 +293,12 @@ export function ImmersiveMemory({
                     hasManualJourneyStopRef.current = true;
                     setJourneyIndex(index);
                   }}
-                >
-                  <span>{index + 1}</span>
-                  {stop.role}
-                </button>
-              ))}
+                  >
+                    <span>{index + 1}</span>
+                    <strong>{stop.label}</strong>
+                    <small>{stop.role}</small>
+                  </button>
+                ))}
             </div>
           ) : null}
         </aside>

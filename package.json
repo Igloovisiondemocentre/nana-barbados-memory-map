@@ -19,5 +19,18 @@
     "@vitejs/plugin-react": "^5.1.1",
     "typescript": "^5.9.3",
     "vite": "^7.2.6"
-  }
+  },
+  "description": "A React + Vite prototype for an interactive Barbados memory map built around Nana's voice recordings, BODA branding, and 360-ready place views.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Igloovisiondemocentre/nana-barbados-memory-map.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Igloovisiondemocentre/nana-barbados-memory-map/issues"
+  },
+  "homepage": "https://github.com/Igloovisiondemocentre/nana-barbados-memory-map#readme"
 }

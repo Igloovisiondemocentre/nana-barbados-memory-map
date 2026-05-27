@@ -3,6 +3,7 @@ import { journeyStopsByMemoryId, sceneContextsByMemoryId } from "./sceneGuides";
 import { assetPath } from "../utils/assets";
 
 const drawing = assetPath("assets/images/nana-window-drawing.jpg");
+const grandmotherHouseWide = assetPath("assets/images/grandmother-house-wide.jpg");
 
 const baseMemories: MemoryPoint[] = [
   {
@@ -439,17 +440,17 @@ const baseMemories: MemoryPoint[] = [
       "Nana leaves the grandchildren with Annie's lesson: whatever you do, do it with all your might. If you are a carpenter, be the best carpenter ever and you will never be out of work. And always try not to hurt anyone; do good to everybody. Simple words, but proper strong.",
     media: {
       kind: "google-street-view",
-      src: drawing,
-      alt: "Drawing placeholder for Nana's advice to her grandchildren",
-      credit: "Blunts / Mount Hillaby landscape, used as the family-wisdom setting",
+      src: grandmotherHouseWide,
+      alt: "Nana's orange and grey Barbados house from the garden",
+      credit: "Nana's Barbados house, used as the family-wisdom setting",
       google: {
-        panoId: "CAoSF0NJSE0wb2dLRUlDQWdJRHF5OHZncmdF",
-        lat: 13.197258,
-        lng: -59.583465,
-        heading: 15,
+        lat: 13.219949,
+        lng: -59.636421,
+        heading: 90,
         pitch: 0,
         fov: 84,
       },
+      externalStreetViewUrl: "https://www.google.com/maps/search/?api=1&query=13.219949,-59.636421",
     },
     familyTags: ["grandchildren", "wisdom", "future"],
   },

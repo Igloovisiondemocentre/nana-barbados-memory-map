@@ -1,4 +1,5 @@
 import type { GoogleStreetView, MemoryJourneyStop, MemoryPoint } from "../types";
+import { assetPath } from "../utils/assets";
 
 const view = (
   panoId: string,
@@ -51,7 +52,10 @@ const views = {
   bathsheba: view("CAoSFkNJSE0wb2dLRUlDQWdJQzY2dWlvWFE.", 13.211604, -59.527684, 80, 90),
   speightstown: view("CAoSHENJQUJJaEQycGZTa0duMHJEWGxwLW9kNUp0dms.", 13.250487, -59.643792, 120),
   tyrolCot: view("CAoSF0NJSE0wb2dLRUlDQWdJQzY4dnVobndF", 13.109243, -59.609084, 40),
+  grandmotherHouse: view("", 13.219949, -59.636421, 90),
 };
+
+const grandmotherHouseStreetViewUrl = "https://www.google.com/maps/search/?api=1&query=13.219949,-59.636421";
 
 const sources = {
   mountHillaby: "https://www.visitbarbados.org/mount-hillaby",
@@ -76,6 +80,19 @@ const stop = (
   role,
   note,
   google,
+});
+
+const photoStop = (
+  label: string,
+  note: string,
+  imageSrc: string,
+  imageAlt: string,
+): MemoryJourneyStop => ({
+  label,
+  role: "Family photograph",
+  note,
+  imageSrc,
+  imageAlt,
 });
 
 export const journeyStopsByMemoryId: Record<string, MemoryJourneyStop[]> = {
@@ -140,8 +157,25 @@ export const journeyStopsByMemoryId: Record<string, MemoryJourneyStop[]> = {
     stop("Cherry Tree Hill", "Area landmark", "Cherry Tree Hill widens the view to sugar country and fields, so the food-and-land lesson has a landscape around it. From a high view, children can ask what land is used to grow and who benefits.", views.cherryTreeHill),
   ],
   "advice-grandchildren": [
-    stop("Gun Hill view", "Nana's reference", "This high view gives Nana's advice a teacher's platform: look carefully, choose well, and do good.", views.gunHill),
-    stop("Farley Hill", "Area landmark", "The journey ends with a wider northern view, like a grandmother sending her family forward with roots behind them.", views.farleyHill),
+    photoStop(
+      "Nana's house",
+      "Start with the house itself, because this advice belongs to the family and the home that held so many ordinary lessons.",
+      assetPath("assets/images/grandmother-house-wide.jpg"),
+      "Nana's orange and grey Barbados house from the garden",
+    ),
+    photoStop(
+      "The veranda",
+      "A closer view of the veranda gives the children a real place to connect with Nana's voice, not just a symbolic landscape.",
+      assetPath("assets/images/grandmother-house-veranda.jpg"),
+      "Nana's Barbados house and veranda from the front garden",
+    ),
+    {
+      label: "Nearby 360",
+      role: "Area landmark",
+      note: "Open the Google Maps point near the house to move around the road and surrounding area when the family wants a 360 reference.",
+      google: views.grandmotherHouse,
+      externalStreetViewUrl: grandmotherHouseStreetViewUrl,
+    },
   ],
 };
 
@@ -298,13 +332,13 @@ export const sceneContextsByMemoryId: Record<string, SceneContext> = {
     ],
   },
   "advice-grandchildren": {
-    summary: "This is Nana at her most teacherly: do your work with care, be excellent in whatever you choose, and do good without harming people. The scene uses high viewpoints because her advice is meant to travel forward, like a child looking out and choosing a path.",
-    whyThisView: "The pin sits on Nana because this lesson comes from her. The journey views are high places, chosen to feel like looking out toward the grandchildren's future.",
-    lookFor: ["A high view", "A sense of direction", "Advice travelling from one generation to the next"],
-    confidence: "Nearby best fit",
+    summary: "This is Nana at her most teacherly: do your work with care, be excellent in whatever you choose, and do good without harming people. The scene now starts from her Barbados house, so the advice feels rooted in a real family place before opening into the nearby map view.",
+    whyThisView: "The pin sits on Nana because this lesson comes from her. The house photographs make the memory intimate, and the Google Maps point lets family members move around the area when they want more local context.",
+    lookFor: ["The house and veranda", "A real family place", "Advice travelling from one generation to the next"],
+    confidence: "Confirmed landmark",
     landmarks: [
-      { label: "Gun Hill", kind: "viewpoint", note: "A high viewpoint used as Nana's teaching platform." },
-      { label: "Farley Hill", kind: "viewpoint", note: "A closing view for looking forward as a family." },
+      { label: "Nana's Barbados house", kind: "family", note: "Family-supplied photographs now anchor this memory." },
+      { label: "Nearby Google Maps point", kind: "viewpoint", note: "External 360/map reference near the house.", sourceUrl: grandmotherHouseStreetViewUrl },
     ],
   },
 };

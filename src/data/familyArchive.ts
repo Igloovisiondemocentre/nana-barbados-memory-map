@@ -2,12 +2,84 @@ import type { FamilyPerson, FamilyTimelineEvent, FamilyTreeBranch } from "../typ
 
 export const familyPeople: FamilyPerson[] = [
   {
+    id: "shadeh-kehinde",
+    name: "Shadeh Kehinde",
+    branch: "Meg cluster",
+    relation: "Parent of Ashton Kehinde",
+    evidence:
+      "Relationship supplied directly by Ashton: Ashton is below Shadeh Kehinde as her child.",
+    confidence: "High",
+  },
+  {
     id: "meg-goodman-odeleye",
     name: "Meg Beulah Cyrilene Goodman (Odeleye)",
     branch: "Meg cluster",
     relation: "Reference person; mother, grandmother and great-grandmother",
     evidence:
       "Memorial notice anchors her identity; Croydon and Barbados records probably connect the Goodman and Odeleye names.",
+    confidence: "High",
+  },
+  {
+    id: "undine-goodman-lynch",
+    name: "Undine Eutace Goodman (Lynch)",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Family-tree ancestor in the Meg Beulah Odeleye line",
+    evidence:
+      "Named in the family tree 'Ancestors of Meg Beulah Odeleye (born Goodman)' with dates 1922-1999.",
+    confidence: "High",
+  },
+  {
+    id: "ashton-oneal-goodman",
+    name: "Ashton Oneal Goodman",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Family-tree ancestor in the Meg Beulah Odeleye line",
+    evidence:
+      "Named in the family tree 'Ancestors of Meg Beulah Odeleye (born Goodman)' with dates 1919-1992.",
+    confidence: "High",
+  },
+  {
+    id: "ella-karen-alleyne-goodman",
+    name: "Ella Karen Alleyne Goodman (Lewis)",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Goodman / Alleyne / Lewis family-tree ancestor",
+    evidence:
+      "Named in the family tree with dates 1892-1976.",
+    confidence: "High",
+  },
+  {
+    id: "archibald-goodman",
+    name: "Archibald Augustus Alleyne Goodman",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Goodman family-tree ancestor; likely connected to the Archie Goodman disappearance story",
+    evidence:
+      "Named in the family tree with dates 1886-1936. Newspaper material refers to Iris Goodman's father as Archie / Archibald Goodman, but the exact source bridge should remain marked as a research point.",
+    confidence: "Medium",
+  },
+  {
+    id: "iris-goodman-greenidge",
+    name: "Iris Goodman / Iris Greenidge",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Goodman family storyteller and article subject",
+    evidence:
+      "Family archive article identifies Iris Greenidge, born Iris Goodman, as born at Hillaby, St. Andrew on 30 June 1913 and seeking closure around her father's disappearance.",
+    confidence: "High",
+  },
+  {
+    id: "isaac-newton-lynch",
+    name: "Isaac Newton Lynch",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Lynch family-tree ancestor",
+    evidence:
+      "Named in the family tree with dates 1872-1935.",
+    confidence: "High",
+  },
+  {
+    id: "annie-elizabeth-lynch-downie",
+    name: "Annie Elizabeth Lynch (Downie)",
+    branch: "Goodman-Lynch-Alleyne archive",
+    relation: "Lynch / Downie family-tree ancestor",
+    evidence:
+      "Named in the family tree with dates 1881-1959.",
     confidence: "High",
   },
   {
@@ -104,6 +176,30 @@ export const familyPeople: FamilyPerson[] = [
 
 export const familyTimeline: FamilyTimelineEvent[] = [
   {
+    id: "iris-birth-hillaby",
+    date: "30 Jun 1913",
+    title: "Iris Goodman born at Hillaby",
+    summary:
+      "Family archive newspaper material identifies Iris Goodman / Iris Greenidge as born at Hillaby, St. Andrew.",
+    status: "Family archive",
+  },
+  {
+    id: "iris-queens-college",
+    date: "1926",
+    title: "Iris sent to Queen's College",
+    summary:
+      "The article says Iris's father sent her to Queen's College and that she boarded around Ocean View Road, off Spooners Hill, with Mrs. Agard.",
+    status: "Family archive",
+  },
+  {
+    id: "archie-goodman-disappearance",
+    date: "c. 1936",
+    title: "Archie Goodman unresolved disappearance",
+    summary:
+      "Family archive article and folk-song material preserve an unresolved Goodman story connected with Hillaby and St. Andrew. This remains a research point, not a settled conclusion.",
+    status: "Research target",
+  },
+  {
     id: "meg-birth",
     date: "27 Sep 1939",
     title: "Meg Goodman birth date",
@@ -190,6 +286,20 @@ export const familyTimeline: FamilyTimelineEvent[] = [
 ];
 
 export const familyTreeBranches: FamilyTreeBranch[] = [
+  {
+    id: "goodman-lynch-alleyne-archive",
+    title: "Goodman, Lynch, Alleyne and Downie archive line",
+    note:
+      "This branch comes from the photo-scanned family tree titled 'Ancestors of Meg Beulah Odeleye (born Goodman)'. It is now the strongest older family-line evidence in the Nana archive.",
+    confidence: "High",
+    generations: [
+      ["David Girwood Lynch", "Margaret Ann Lynch (Lewis)", "Joseph Benjamin Downie", "Rebecca Ann Downie (Williams)"],
+      ["Isaac Newton Lynch", "Annie Elizabeth Lynch (Downie)", "Ella Karen Alleyne Goodman (Lewis)", "Archibald Augustus Alleyne Goodman"],
+      ["Undine Eutace Goodman (Lynch)", "Ashton Oneal Goodman"],
+      ["Meg Beulah Odeleye (born Goodman)"],
+      ["Shadeh Kehinde", "Ashton Kehinde"],
+    ],
+  },
   {
     id: "meg-cluster",
     title: "Meg-centred Goodman cluster",

@@ -68,11 +68,19 @@ export const getLocalBodaChatReply = (question: string, context: LocalBodaChatCo
   const cleanQuestion = normalise(question);
 
   if (hasAny(cleanQuestion, ["hello", "hi ", "hey", "morning", "evening"])) {
-    return "Wuh loss, welcome. I can help with Nana's Barbados, the BODA constitution, the memory map, the 360 journey, or adding your own family pin.";
+    return "Wuh loss, welcome. I can help with Nana's Barbados map, the BODA constitution, BOWL history, Barbados references, the 360 journey, or adding your own Nana-site family pin.";
   }
 
   if (hasAny(cleanQuestion, ["boda", "constitution", "aim", "objective", "association", "mission"])) {
-    return "BODA stands for Barbados Overseas Descendants Association. Its constitution focuses on Barbadian culture, festivals, arts, healthy living, mentoring, relief from hardship and isolation, and community cohesion. It is non-profit, non-partisan, non-sectarian, and works against discrimination. In this app, that connects directly to helping families turn heritage into living contributions.";
+    return "BODA stands for Barbados Overseas Descendants Association. Its organisation work belongs separately from the private Nana family archive. BODA's constitution focuses on Barbadian culture, festivals, arts, healthy living, mentoring, relief from hardship and isolation, and community cohesion. It is non-profit, non-partisan, non-sectarian, and works against discrimination.";
+  }
+
+  if (hasAny(cleanQuestion, ["bowl", "cook it right", "cook", "diabetes", "hypertension", "quadrille", "warri", "olympiad"])) {
+    return "BOWL, the Barbados Overseas Women's Link, is the organisation legacy behind BODA. Its work included Cook It Right health education, diabetes and hypertension awareness, Warri, quadrille, Old Time Barbados displays, fundraising, and youth cultural programmes. Those belong in the BODA organisation story.";
+  }
+
+  if (hasAny(cleanQuestion, ["book", "books", "heroes", "folklore", "constitution", "place names", "places"])) {
+    return "The BODA organisation site can use Barbados-wide resources: the Constitution booklet, National Heroes material, folklore resources, historical guides, place-name references and culture booklets. Private family stories and pins stay on the Nana website.";
   }
 
   if (hasAny(cleanQuestion, ["pin", "pins", "add", "parish", "village", "photo", "picture", "voice", "audio", "contribute"])) {
@@ -88,9 +96,7 @@ export const getLocalBodaChatReply = (question: string, context: LocalBodaChatCo
   }
 
   if (hasAny(cleanQuestion, ["meg", "goodman", "family", "roots", "heritage"])) {
-    const heritageMemory =
-      context.memories.find((memory) => memory.id === "family-heritage") ?? context.activeMemory ?? context.memories[0];
-    return `${describeMemory(heritageMemory)} The bigger point is that visitors should not only observe heritage. They should be able to add their own family places, voices and photos too.`;
+    return "Family history belongs on the Nana website and family layer, not inside the BODA organisation knowledge. Use the map's family layer for people, stories, locations and research pins, and keep BODA focused on the association, BOWL legacy, constitution and Barbados-wide learning.";
   }
 
   const tokens = getQuestionTokens(question);
@@ -106,7 +112,7 @@ export const getLocalBodaChatReply = (question: string, context: LocalBodaChatCo
   }
 
   if (context.page === "boda") {
-    return "You are on the About BODA page. This page explains the constitution: BODA's name, aims, inclusive principles, membership, officers, finance, meetings and governance.";
+    return "You are on the About BODA page. This page explains BODA's organisation identity: the constitution, BOWL legacy, Cook It Right, cultural programmes, membership, officers, finance, meetings and governance.";
   }
 
   if (context.page === "contribute") {

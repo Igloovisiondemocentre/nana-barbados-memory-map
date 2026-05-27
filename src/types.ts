@@ -12,9 +12,12 @@ export type GoogleStreetView = {
 
 export type MemoryJourneyStop = {
   label: string;
-  role: "Nana's reference" | "Area landmark";
+  role: "Nana's reference" | "Area landmark" | "Family photograph";
   note: string;
-  google: GoogleStreetView;
+  google?: GoogleStreetView;
+  imageSrc?: string;
+  imageAlt?: string;
+  externalStreetViewUrl?: string;
 };
 
 export type MemoryPoint = {
@@ -79,7 +82,7 @@ export type FamilyPoint = {
 export type FamilyPerson = {
   id: string;
   name: string;
-  branch: "Meg cluster" | "Lynch-Goodman cluster" | "Separate Goodman branch";
+  branch: "Meg cluster" | "Lynch-Goodman cluster" | "Goodman-Lynch-Alleyne archive" | "Separate Goodman branch";
   relation: string;
   evidence: string;
   confidence: "High" | "Medium" | "Low";
@@ -90,7 +93,7 @@ export type FamilyTimelineEvent = {
   date: string;
   title: string;
   summary: string;
-  status: "Documented" | "Probable" | "Family notice" | "Research target";
+  status: "Documented" | "Probable" | "Family notice" | "Research target" | "Family archive";
 };
 
 export type FamilyTreeBranch = {

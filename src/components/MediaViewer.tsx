@@ -13,6 +13,7 @@ export function MediaViewer({ memory }: MediaViewerProps) {
   const googleMapsKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const isEmbed = memory.media.kind === "embed";
   const isGoogleStreetView = memory.media.kind === "google-street-view";
+  const savedStreetViewUrl = memory.media.externalStreetViewUrl?.trim() ?? "";
   const canLoadStreetView = Boolean(isGoogleStreetView && googleMapsKey && memory.media.google);
 
   useEffect(() => {
@@ -51,12 +52,15 @@ export function MediaViewer({ memory }: MediaViewerProps) {
   }, [canLoadStreetView, googleMapsKey, memory.media.google]);
 
   const googleMapsUrl = useMemo(() => {
+    if (savedStreetViewUrl) {
+      return savedStreetViewUrl;
+    }
     if (!memory.media.google) {
       return "";
     }
     const { lat, lng } = memory.media.google;
     return `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${lat},${lng}`;
-  }, [memory.media.google]);
+  }, [memory.media.google, savedStreetViewUrl]);
 
   return (
     <section className="mediaPanel" aria-labelledby="active-memory-title">
@@ -86,11 +90,13 @@ export function MediaViewer({ memory }: MediaViewerProps) {
           <div className="streetViewGate">
             {googleMapsKey ? <MapPin size={22} /> : <KeyRound size={22} />}
             <strong>
-              {googleMapsKey ? "Street View is ready" : "Google key needed"}
+              {googleMapsKey ? "Street View is ready" : savedStreetViewUrl ? "Google Maps link ready" : "Google key needed"}
             </strong>
             <span>
               {googleMapsKey
                 ? "Load the 360 scene when you are ready to view this place."
+                : savedStreetViewUrl
+                  ? "Open the saved Google Maps point to move around near this place."
                 : "Add VITE_GOOGLE_MAPS_API_KEY to .env.local to enable 360 views."}
             </span>
           </div>
@@ -122,12 +128,16 @@ export function MediaViewer({ memory }: MediaViewerProps) {
                 setIsStreetViewOpen(true);
                 setIsStreetViewLoading(true);
                 setShowStreetViewHelp(false);
+                return;
+              }
+              if (savedStreetViewUrl) {
+                window.open(savedStreetViewUrl, "_blank", "noopener,noreferrer");
               }
             }}
-            disabled={isGoogleStreetView && !canLoadStreetView}
+            disabled={isGoogleStreetView && !canLoadStreetView && !savedStreetViewUrl}
           >
             <ExternalLink size={15} />
-            {isStreetViewOpen ? "360 Open" : "Enter 360"}
+            {isStreetViewOpen ? "360 Open" : savedStreetViewUrl && !canLoadStreetView ? "Open 360" : "Enter 360"}
           </button>
         </div>
       </div>

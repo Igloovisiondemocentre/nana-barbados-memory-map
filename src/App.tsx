@@ -1,6 +1,7 @@
 import { type CSSProperties, type FormEvent, type PointerEvent, useEffect, useMemo, useState } from "react";
 import {
   Camera,
+  ExternalLink,
   Gamepad2,
   Headphones,
   MapPinned,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 import { BarbadosMap } from "./components/BarbadosMap";
 import { FamilyArchivePanel } from "./components/FamilyArchivePanel";
+import { GoodmanMysteryTrail } from "./components/GoodmanMysteryTrail";
 import { ImmersiveMemory } from "./components/ImmersiveMemory";
 import { familyPoints } from "./data/familyPoints";
 import { memories } from "./data/memories";
@@ -30,6 +32,10 @@ const bodaChatEndpoint =
   import.meta.env.VITE_DEPLOY_TARGET === "github-pages"
     ? ""
     : import.meta.env.VITE_BODA_CHAT_ENDPOINT || "/api/boda-chat";
+const nanaPadletUrl = "https://padlet.com/ispirato1508/celebrating-mum-2x4opawyiztof4k2";
+const nanaFuneralPhotosUrl = "https://drive.google.com/drive/folders/1LV14b6NAU4jfvEr6GguTg5H1Q57j05a0?usp=sharing";
+const nanaServiceYoutubeUrl = "https://www.youtube.com/live/dNi7I2Y3lF0?si=-WKMeSjmDE6adshh";
+const nanaServiceYoutubeEmbedUrl = "https://www.youtube.com/embed/dNi7I2Y3lF0";
 
 const immersiveJourneyIds = [
   "natural-environment",
@@ -55,7 +61,7 @@ type ChatMessage = {
   content: string;
 };
 
-type AppPage = "map" | "boda" | "contribute";
+type AppPage = "map" | "boda" | "contribute" | "goodman-trail" | "nana-contributions";
 
 type UserPin = {
   id: string;
@@ -124,6 +130,12 @@ const readFileAsDataUrl = (file: File | null) =>
 
 export default function App() {
   const [page, setPage] = useState<AppPage>(() => {
+    if (window.location.hash === "#goodman-trail") {
+      return "goodman-trail";
+    }
+    if (window.location.hash === "#nana-contributions") {
+      return "nana-contributions";
+    }
     if (window.location.hash === "#boda") {
       return "boda";
     }
@@ -233,7 +245,16 @@ export default function App() {
   }, [userPins]);
 
   useEffect(() => {
-    const nextHash = page === "boda" ? "#boda" : page === "contribute" ? "#contribute" : "#map";
+    const nextHash =
+      page === "boda"
+        ? "#boda"
+        : page === "contribute"
+          ? "#contribute"
+          : page === "goodman-trail"
+            ? "#goodman-trail"
+            : page === "nana-contributions"
+              ? "#nana-contributions"
+              : "#map";
     if (window.location.hash !== nextHash) {
       window.history.replaceState(null, "", nextHash);
     }
@@ -241,6 +262,13 @@ export default function App() {
 
   const navigateToPage = (nextPage: AppPage) => {
     setPage(nextPage);
+    setMenuOpen(false);
+  };
+
+  const openHillabyFamilyPin = () => {
+    setFamilyLayerVisible(true);
+    setSelectedFamilyPointId("hillaby-archie-goodman");
+    setPage("map");
     setMenuOpen(false);
   };
 
@@ -394,7 +422,7 @@ export default function App() {
         memories: allMemories,
         userPinCount: userPins.length,
         activeMemory,
-        page,
+        page: page === "goodman-trail" || page === "nana-contributions" ? "map" : page,
       });
 
     try {
@@ -471,6 +499,14 @@ export default function App() {
                 <MapPinned size={18} />
                 About BODA
               </button>
+              <button type="button" role="menuitem" onClick={() => navigateToPage("goodman-trail")}>
+                <Headphones size={18} />
+                Goodman Mystery Trail
+              </button>
+              <button type="button" role="menuitem" onClick={() => navigateToPage("nana-contributions")}>
+                <Camera size={18} />
+                Nana's Contributions
+              </button>
               <button type="button" role="menuitem" onClick={() => navigateToPage("contribute")}>
                 <Plus size={18} />
                 Add your pin
@@ -531,6 +567,24 @@ export default function App() {
               BODA GPT
             </span>
             <strong>Ask me sumting, nuh!</strong>
+          </button>
+          <button
+            type="button"
+            className="goodmanTrailSticker"
+            onClick={() => navigateToPage("goodman-trail")}
+            aria-label="Open The Goodman Mystery Trail"
+          >
+            <span>The Goodman Mystery Trail</span>
+            <strong>A family mystery from Hillaby, St. Andrew</strong>
+          </button>
+          <button
+            type="button"
+            className="nanaContributionsSticker"
+            onClick={() => navigateToPage("nana-contributions")}
+            aria-label="Open Nana's Contributions"
+          >
+            <span>Nana's Contributions</span>
+            <strong>Service booklet, memories, photos and livestream</strong>
           </button>
           {chatOpen ? (
             <aside className="bodaChatPanel" aria-label="BODA GPT chat">
@@ -600,6 +654,104 @@ export default function App() {
           ) : null}
         </section>
       </main>
+      ) : page === "goodman-trail" ? (
+        // The Goodman Trail is a family-history section for Nana's site, separate from the BODA organisation site.
+        <GoodmanMysteryTrail onReturnToMap={() => navigateToPage("map")} onOpenHillabyPin={openHillabyFamilyPin} />
+      ) : page === "nana-contributions" ? (
+        <main className="nanaContributionsPage" id="nana-contributions">
+          <section className="nanaContributionsHero" aria-labelledby="nana-contributions-title">
+            <div>
+              <span>Nana's Contributions</span>
+              <h1 id="nana-contributions-title">Meg Goodman, remembered in service and action</h1>
+              <p>
+                This part of the family site gathers the public memories around Nana's service, the
+                funeral booklet, family photos, and the ways people can still leave love and testimony.
+                It sits alongside the map because Nana's life was never only one place: it was family,
+                Barbados, BOWL, care, health, culture and grandchildren carrying the work forward.
+              </p>
+            </div>
+            <div className="nanaContributionLinks" aria-label="Nana contribution links">
+              <a href={nanaPadletUrl} target="_blank" rel="noreferrer">
+                Leave a message on Padlet <ExternalLink size={15} />
+              </a>
+              <a href={nanaFuneralPhotosUrl} target="_blank" rel="noreferrer">
+                View funeral photos <ExternalLink size={15} />
+              </a>
+              <a href={nanaServiceYoutubeUrl} target="_blank" rel="noreferrer">
+                Open livestream on YouTube <ExternalLink size={15} />
+              </a>
+            </div>
+          </section>
+
+          <section className="nanaContributionGrid" aria-label="Nana service archive">
+            <article className="serviceBookletPanel">
+              <div>
+                <span>Order of service booklet</span>
+                <h2>Read through the service</h2>
+                <p>
+                  The booklet is preserved here as a family document, so children, grandchildren,
+                  relatives and friends can return to the words, photographs and tributes around Nana.
+                </p>
+              </div>
+              <iframe
+                title="Nana service booklet PDF reader"
+                src={assetPath("assets/documents/nana-service-booklet.pdf")}
+                loading="lazy"
+              />
+              <a href={assetPath("assets/documents/nana-service-booklet.pdf")} target="_blank" rel="noreferrer">
+                Open booklet in a new tab <ExternalLink size={15} />
+              </a>
+            </article>
+
+            <article className="serviceVideoPanel">
+              <span>Recorded service</span>
+              <h2>Watch the livestream</h2>
+              <p>
+                The service recording lets family members who could not be there sit with the ceremony,
+                the voices and the feeling of the day.
+              </p>
+              <iframe
+                title="Nana funeral service livestream"
+                src={nanaServiceYoutubeEmbedUrl}
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </article>
+
+            <article className="nanaLegacyPanel">
+              <span>What she carried forward</span>
+              <h2>Family care became community work</h2>
+              <p>
+                Nana's contribution lives in the family archive and in the BOWL legacy: bringing people
+                together around Barbadian identity, food, health, culture, children, older people and
+                practical care. BODA grows from that same spirit, with her grandchildren and descendants
+                turning memory into a living bridge for the Barbados diaspora.
+              </p>
+              <button type="button" className="xrButton" onClick={() => navigateToPage("boda")}>
+                Read the BOWL and BODA legacy
+              </button>
+            </article>
+
+            <article className="nanaMemoryPanel">
+              <span>Family memories</span>
+              <h2>Keep adding love</h2>
+              <p>
+                Use the Padlet for condolences, stories, thanks and small memories. Use the photo folder
+                for the funeral service pictures. These outside archives stay linked here so the family
+                has one calm place to find them again.
+              </p>
+              <div className="nanaContributionLinks compact">
+                <a href={nanaPadletUrl} target="_blank" rel="noreferrer">
+                  Padlet messages <ExternalLink size={15} />
+                </a>
+                <a href={nanaFuneralPhotosUrl} target="_blank" rel="noreferrer">
+                  Funeral photos <ExternalLink size={15} />
+                </a>
+              </div>
+            </article>
+          </section>
+        </main>
       ) : page === "boda" ? (
         <main className="bodaPage" id="boda">
           <section className="bodaHero">
@@ -607,8 +759,9 @@ export default function App() {
               <span>About BODA</span>
               <h1>Barbados Overseas Descendants Association</h1>
               <p>
-                The constitution sets out BODA's name, charitable aims, membership, officers,
-                committee powers, finance rules and governance procedures.
+                BODA grows from Nana's BOWL work: practical care, Barbadian culture, health
+                education, youth activity and community belonging. Her grandchildren and wider
+                descendants are carrying that work forward for a new generation.
               </p>
             </div>
             <button type="button" className="xrButton" onClick={() => navigateToPage("contribute")}>
@@ -691,6 +844,50 @@ export default function App() {
               <p>
                 The constitution includes notice, appeals and voting procedures for discipline, amendments,
                 and dissolution, so decisions are handled transparently by the committee and members.
+              </p>
+            </article>
+            <article>
+              <span>BOWL legacy</span>
+              <h2>From women's link to descendants association</h2>
+              <p>
+                BODA grows out of the work of BOWL, the Barbados Overseas Women's Link. BOWL brought
+                Barbadian people together through health education, cultural heritage, youth activity,
+                public events and practical community leadership.
+              </p>
+            </article>
+            <article>
+              <span>Cook It Right</span>
+              <h2>Health taught through familiar food</h2>
+              <p>
+                BOWL's Cook It Right work connected Barbadian and Caribbean food with healthier living,
+                especially around hypertension, diabetes, heart conditions, obesity, nutrition and portion size.
+              </p>
+            </article>
+            <article>
+              <span>Cultural programmes</span>
+              <h2>Warri, quadrille and youth identity</h2>
+              <p>
+                BOWL's cultural activity included Warri, quadrille, stick science, Old Time Barbados displays,
+                fundraising events and the BOWL Olympiad Wave, linking young people with African/Caribbean
+                culture, sport and self-identity.
+              </p>
+            </article>
+            <article>
+              <span>Barbados reference library</span>
+              <h2>Books, constitution and place knowledge</h2>
+              <p>
+                The BODA organisation site carries Barbados-wide resources such as the Constitution
+                booklet, National Heroes material, Barbadian folklore, place-name research,
+                historical guides and culture booklets for descendants who want to learn.
+              </p>
+            </article>
+            <article>
+              <span>Family and organisation</span>
+              <h2>Two archives, one legacy of care</h2>
+              <p>
+                This Nana site keeps the family archive close to home. The separate BODA site holds
+                the wider organisation story: BOWL programmes, BODA governance, public events and
+                Barbadian diaspora learning.
               </p>
             </article>
           </section>
