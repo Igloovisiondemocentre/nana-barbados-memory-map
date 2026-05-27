@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
 import { goodmanTrailData, type MemoryTokenId } from "../data/goodmanTrail";
 import { assetPath } from "../utils/assets";
 
@@ -94,6 +94,28 @@ export function GoodmanMysteryTrail({ onReturnToMap, onOpenHillabyPin }: Goodman
   const [shelfObjects, setShelfObjects] = useState<string[]>([]);
   const [activeToken, setActiveToken] = useState<MemoryTokenId>("song");
   const [caseActionMessage, setCaseActionMessage] = useState("");
+  const [posterProgress, setPosterProgress] = useState(0);
+  const pageRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const updatePosterProgress = () => {
+      const page = pageRef.current;
+      if (!page) {
+        return;
+      }
+      const rect = page.getBoundingClientRect();
+      const maxTravel = Math.max(1, rect.height - window.innerHeight);
+      setPosterProgress(Math.min(1, Math.max(0, -rect.top / maxTravel)));
+    };
+
+    updatePosterProgress();
+    window.addEventListener("scroll", updatePosterProgress, { passive: true });
+    window.addEventListener("resize", updatePosterProgress);
+    return () => {
+      window.removeEventListener("scroll", updatePosterProgress);
+      window.removeEventListener("resize", updatePosterProgress);
+    };
+  }, []);
 
   const unlockToken = (token: MemoryTokenId) => {
     setTokens((currentTokens) => (currentTokens.includes(token) ? currentTokens : [...currentTokens, token]));
@@ -209,11 +231,43 @@ export function GoodmanMysteryTrail({ onReturnToMap, onOpenHillabyPin }: Goodman
     }
   };
 
+  const shareTrail = async () => {
+    const text =
+      "Walk the Goodman of Hillaby memory trail: a respectful family-history journey through song, place, rumour and archive.";
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "The Goodman Mystery Trail", text, url: window.location.href });
+        setCaseActionMessage("Shared the Goodman trail.");
+        return;
+      }
+      await navigator.clipboard.writeText(window.location.href);
+      setCaseActionMessage("Trail link copied. Facebook and Instagram buttons can be connected when BODA social links are confirmed.");
+    } catch {
+      setCaseActionMessage("Sharing was cancelled. Facebook and Instagram buttons are placeholders for now.");
+    }
+  };
+
   return (
-    <main className={`goodmanTrailPage ${trailStarted ? "trailStarted" : ""}`} id="goodman-trail">
+    <main
+      ref={pageRef}
+      className={`goodmanTrailPage ${trailStarted ? "trailStarted" : ""}`}
+      id="goodman-trail"
+      style={{ "--goodman-poster-progress": posterProgress } as CSSProperties}
+    >
       <div className="goodmanPosterBackdrop" aria-hidden="true">
         <img src={assetPath("assets/images/goodman-heartman-poster-background.png")} alt="" />
       </div>
+      <section className="goodmanPosterShowcase" aria-label="Goodman of Hillaby poster artwork">
+        <img src={assetPath("assets/images/goodman-heartman-poster-background.png")} alt="The Heartman of St Andrew poster artwork for the Goodman of Hillaby trail" />
+        <div>
+          <span>Archive artwork</span>
+          <h2>Read the poster before the trail begins</h2>
+          <p>
+            The image is part of the atmosphere of this page: song, rumour, churchyard,
+            Hillaby and the Goodman lineage. Scroll slowly and the poster moves with the story.
+          </p>
+        </div>
+      </section>
       <section className="goodmanTrailHero goodmanOpeningScreen" aria-labelledby="goodman-trail-title">
         <div>
           <h1 id="goodman-trail-title">{goodmanTrailData.title}</h1>
@@ -648,6 +702,12 @@ export function GoodmanMysteryTrail({ onReturnToMap, onOpenHillabyPin }: Goodman
               </button>
               <button type="button" onClick={() => setCaseActionMessage("TODO: attach the song sheet scan.")}>
                 View the song sheet
+              </button>
+              <button type="button" onClick={shareTrail}>
+                Share this trail
+              </button>
+              <button type="button" onClick={() => setCaseActionMessage("Placeholder: add BODA Facebook and Instagram links here when ready.")}>
+                Facebook / Instagram
               </button>
               <button type="button" onClick={onReturnToMap}>
                 Return to the map

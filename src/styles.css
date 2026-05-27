@@ -133,6 +133,35 @@ button {
   line-height: 1.4;
 }
 
+.rootSugarPodcastPanel small {
+  color: #24405f;
+  font-weight: 820;
+}
+
+.rootSugarActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rootSugarActions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  border: 1px solid rgba(7, 22, 76, 0.12);
+  border-radius: 999px;
+  padding: 0 11px;
+  color: #07164c;
+  background: rgba(255, 255, 255, 0.84);
+  font-size: 0.78rem;
+  font-weight: 920;
+}
+
+.rootSugarActions button:first-child {
+  background: var(--boda-yellow);
+}
+
 .mobileMemorialTitle {
   display: none;
 }
@@ -3123,6 +3152,7 @@ button {
   gap: clamp(18px, 3vw, 30px);
   min-height: calc(100vh - 108px);
   padding: clamp(18px, 3vw, 38px);
+  --goodman-poster-progress: 0;
   overflow: hidden;
   background: #120f0b;
 }
@@ -3134,8 +3164,8 @@ button {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 207, 27, 0.14), transparent 20rem),
-    linear-gradient(90deg, rgba(18, 15, 11, 0.78), rgba(246, 239, 220, 0.22), rgba(18, 15, 11, 0.8));
+    radial-gradient(circle at 18% 12%, rgba(255, 207, 27, 0.1), transparent 20rem),
+    linear-gradient(90deg, rgba(18, 15, 11, 0.54), rgba(246, 239, 220, 0.1), rgba(18, 15, 11, 0.58));
 }
 
 .goodmanPosterBackdrop {
@@ -3148,13 +3178,68 @@ button {
 }
 
 .goodmanPosterBackdrop img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  opacity: 0.3;
-  transform: scale(1.08);
-  filter: sepia(0.14) saturate(0.94) contrast(0.98) blur(0.8px);
+  position: absolute;
+  top: -4vh;
+  left: 50%;
+  width: min(92vw, 780px);
+  height: auto;
+  max-width: none;
+  opacity: 0.54;
+  transform: translateX(-50%) translateY(calc(var(--goodman-poster-progress) * -42%));
+  filter: sepia(0.04) saturate(1.08) contrast(1.02);
+  will-change: transform;
+}
+
+.goodmanPosterShowcase {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.58fr) minmax(260px, 0.42fr);
+  align-items: end;
+  gap: clamp(18px, 4vw, 46px);
+  width: min(1180px, 100%);
+  min-height: min(88vh, 940px);
+  margin: 0 auto;
+  padding: clamp(22px, 4vw, 54px) 0 clamp(12px, 3vw, 28px);
+}
+
+.goodmanPosterShowcase img {
+  justify-self: center;
+  width: min(100%, 520px);
+  max-height: min(82vh, 860px);
+  object-fit: contain;
+  border: 1px solid rgba(255, 207, 27, 0.42);
+  border-radius: 10px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.36);
+}
+
+.goodmanPosterShowcase div {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(255, 207, 27, 0.28);
+  border-radius: var(--radius);
+  padding: clamp(16px, 2.5vw, 26px);
+  color: #fff8dd;
+  background: rgba(18, 15, 11, 0.72);
+  backdrop-filter: blur(10px);
+}
+
+.goodmanPosterShowcase span {
+  color: var(--boda-yellow);
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.goodmanPosterShowcase h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4.8rem);
+  line-height: 0.95;
+}
+
+.goodmanPosterShowcase p {
+  margin: 0;
+  color: #fff5d0;
+  font-weight: 690;
+  line-height: 1.55;
 }
 
 .goodmanTrailHero,
@@ -3169,6 +3254,19 @@ button {
   align-items: end;
   gap: clamp(18px, 4vw, 52px);
   padding: clamp(20px, 4vw, 48px) 0 4px;
+}
+
+.goodmanTrailHero > div:first-child {
+  border: 1px solid rgba(255, 207, 27, 0.3);
+  border-radius: var(--radius);
+  padding: clamp(18px, 3vw, 30px);
+  background: rgba(255, 252, 245, 0.78);
+  box-shadow: 0 22px 58px rgba(4, 9, 24, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.goodmanTrailHero > div:first-child p + p {
+  margin-top: 12px;
 }
 
 .goodmanTrailHero span,
@@ -4555,6 +4653,33 @@ button {
   .memoryRoomGrid,
   .caseFileGrid {
     grid-template-columns: 1fr;
+  }
+
+  .goodmanPosterBackdrop img {
+    top: -2vh;
+    width: min(118vw, 560px);
+    opacity: 0.42;
+    transform: translateX(-50%) translateY(calc(var(--goodman-poster-progress) * -38%));
+  }
+
+  .goodmanPosterShowcase {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 14px;
+  }
+
+  .goodmanPosterShowcase img {
+    width: min(100%, 360px);
+    max-height: 72vh;
+  }
+
+  .goodmanPosterShowcase div {
+    width: min(100%, 420px);
+    justify-self: center;
+  }
+
+  .goodmanTrailHero {
+    padding-top: 8px;
   }
 
   .goodmanModule {

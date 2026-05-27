@@ -403,6 +403,20 @@ export default function App() {
     }
   };
 
+  const shareCurrentPage = async (title: string, text: string) => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, text, url: window.location.href });
+        setShareMessage("Share sheet opened.");
+        return;
+      }
+      await navigator.clipboard.writeText(`${text} ${window.location.href}`);
+      setShareMessage("Page link copied. Facebook and Instagram buttons are placeholders until the final accounts are connected.");
+    } catch {
+      setShareMessage("Share was cancelled.");
+    }
+  };
+
   const sendChatMessage = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -545,6 +559,16 @@ export default function App() {
               A grandson interviewing Nana, listening back, and learning Barbados through her voice:
               family roots, sugar, village life, migration, work, faith and the places that held the stories.
             </p>
+            <div className="rootSugarActions" aria-label="Root and Sugar sharing links">
+              <button type="button" onClick={() => shareCurrentPage("Root & Sugar Podcast", "Explore Nana's Barbados memories through the Root & Sugar Podcast map.")}>
+                <Share2 size={15} />
+                Share
+              </button>
+              <button type="button" onClick={() => setShareMessage("Placeholder: add the Root & Sugar podcast link here.")}>
+                Podcast link
+              </button>
+            </div>
+            {shareMessage ? <small aria-live="polite">{shareMessage}</small> : null}
           </div>
           <div className="mobileMemorialTitle" aria-hidden="true">
             <span>In Loving Memory</span>
