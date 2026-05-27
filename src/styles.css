@@ -95,6 +95,44 @@ button {
   pointer-events: none;
 }
 
+.rootSugarPodcastPanel {
+  position: absolute;
+  top: clamp(18px, 3vw, 34px);
+  left: clamp(18px, 3vw, 34px);
+  z-index: 5;
+  display: grid;
+  gap: 7px;
+  width: min(360px, calc(100% - 36px));
+  border: 1px solid rgba(7, 22, 76, 0.12);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: #07164c;
+  background: rgba(255, 252, 245, 0.74);
+  box-shadow: 0 18px 38px rgba(7, 22, 76, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.rootSugarPodcastPanel span {
+  color: #0b5f49;
+  font-size: 0.75rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.rootSugarPodcastPanel h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.4vw, 2.15rem);
+  line-height: 1;
+}
+
+.rootSugarPodcastPanel p {
+  margin: 0;
+  color: #26314f;
+  font-size: 0.92rem;
+  font-weight: 680;
+  line-height: 1.4;
+}
+
 .mobileMemorialTitle {
   display: none;
 }
@@ -3096,26 +3134,27 @@ button {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 207, 27, 0.2), transparent 22rem),
-    linear-gradient(90deg, rgba(18, 15, 11, 0.7), rgba(246, 239, 220, 0.52), rgba(18, 15, 11, 0.74));
+    radial-gradient(circle at 18% 12%, rgba(255, 207, 27, 0.14), transparent 20rem),
+    linear-gradient(90deg, rgba(18, 15, 11, 0.78), rgba(246, 239, 220, 0.22), rgba(18, 15, 11, 0.8));
 }
 
 .goodmanPosterBackdrop {
   position: fixed;
   inset: 0;
   z-index: -2;
-  display: grid;
-  place-items: center;
   pointer-events: none;
   background: #120f0b;
+  overflow: hidden;
 }
 
 .goodmanPosterBackdrop img {
-  width: min(100vw, 780px);
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  opacity: 0.42;
-  filter: sepia(0.12) saturate(0.9) contrast(0.96);
+  object-position: center center;
+  opacity: 0.3;
+  transform: scale(1.08);
+  filter: sepia(0.14) saturate(0.94) contrast(0.98) blur(0.8px);
 }
 
 .goodmanTrailHero,
@@ -3177,8 +3216,8 @@ button {
   border: 1px solid rgba(7, 22, 76, 0.12);
   border-radius: var(--radius);
   padding: 18px;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 252, 245, 0.62);
+  backdrop-filter: blur(12px);
   box-shadow: 0 16px 34px rgba(7, 22, 76, 0.08);
 }
 
@@ -3189,10 +3228,10 @@ button {
   border-radius: var(--radius);
   padding: clamp(18px, 3vw, 28px);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(246, 239, 220, 0.7)),
-    rgba(255, 255, 255, 0.78);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(246, 239, 220, 0.46)),
+    rgba(255, 255, 255, 0.54);
   box-shadow: 0 22px 54px rgba(4, 9, 24, 0.18);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
 }
 
 .goodmanModuleIntro h2 {
@@ -3280,7 +3319,7 @@ button {
   border: 1px solid rgba(7, 22, 76, 0.12);
   border-radius: var(--radius);
   padding: clamp(16px, 2.5vw, 24px);
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 252, 245, 0.62);
 }
 
 .goodmanStopDetail h3,
@@ -3420,10 +3459,10 @@ button {
   border: 1px solid rgba(7, 22, 76, 0.13);
   border-radius: var(--radius);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 248, 218, 0.76)),
-    rgba(255, 255, 255, 0.75);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 248, 218, 0.54)),
+    rgba(255, 255, 255, 0.56);
   box-shadow: 0 22px 46px rgba(4, 9, 24, 0.16);
-  backdrop-filter: blur(9px);
+  backdrop-filter: blur(13px);
 }
 
 .songRevealPanel {
@@ -3999,17 +4038,32 @@ button {
       var(--scrapbook-bg) center center / cover no-repeat;
   }
 
+  .rootSugarPodcastPanel {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: min(100%, 420px);
+    margin: 0 auto;
+    padding: 12px 13px;
+  }
+
+  .rootSugarPodcastPanel h1 {
+    font-size: 1.35rem;
+  }
+
+  .rootSugarPodcastPanel p {
+    font-size: 0.86rem;
+  }
+
   .heroMapStage::before {
     opacity: 0.18;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(237, 244, 251, 0.42));
   }
 
   .mobileMemorialTitle {
-    position: relative;
-    z-index: 3;
-    grid-column: 1 / -1;
-    grid-row: 1;
-    display: grid;
+    display: none;
     justify-items: center;
     width: min(100%, 330px);
     margin: 0 auto;

@@ -471,7 +471,7 @@ export default function App() {
           <img src={assetPath("assets/images/boda-logo-transparent.png")} alt="BODA logo" />
           <span className="titleLockup">
             <strong>Nana's Barbados</strong>
-            <em>Memory Map</em>
+            <em>Root & Sugar Podcast</em>
           </span>
         </button>
         <nav className="headerNav landingNav" aria-label="Primary">
@@ -537,7 +537,15 @@ export default function App() {
 
       {page === "map" ? (
       <main className="mapOnlyShell" id="memory-map">
-        <section className="heroMapStage" aria-label="Interactive Barbados memory map">
+        <section className="heroMapStage" aria-label="Root and Sugar podcast memory map">
+          <div className="rootSugarPodcastPanel">
+            <span>Root & Sugar Podcast</span>
+            <h1>Nana's memories, learned out loud</h1>
+            <p>
+              A grandson interviewing Nana, listening back, and learning Barbados through her voice:
+              family roots, sugar, village life, migration, work, faith and the places that held the stories.
+            </p>
+          </div>
           <div className="mobileMemorialTitle" aria-hidden="true">
             <span>In Loving Memory</span>
             <strong>Meg Goodman</strong>
