@@ -856,6 +856,7 @@ button {
 .backButton,
 .viewBadge,
 .sceneGuideButton,
+.xrPresentationToggle,
 .journeyStops button {
   display: inline-flex;
   align-items: center;
@@ -877,13 +878,20 @@ button {
 }
 
 .sceneGuideButton,
+.xrPresentationToggle,
 .journeyStops button {
   background: rgba(0, 0, 0, 0.76);
 }
 
-.sceneGuideButton.active {
+.sceneGuideButton.active,
+.xrPresentationToggle.active {
   color: #111;
   background: #fff;
+}
+
+.xrPresentationToggle.active {
+  border-color: rgba(255, 207, 27, 0.9);
+  background: var(--boda-yellow);
 }
 
 .journeyStops {
@@ -1043,6 +1051,140 @@ button {
   font-size: clamp(1rem, 1.6vw, 1.15rem);
   font-weight: 650;
   line-height: 1.55;
+}
+
+.xrStopNote {
+  display: none;
+  margin-top: 13px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.42;
+}
+
+.xrPresentation::after {
+  background:
+    radial-gradient(ellipse at center, transparent 0 46%, rgba(0, 0, 0, 0.22) 78%, rgba(0, 0, 0, 0.42)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 22%, rgba(0, 0, 0, 0.54));
+}
+
+.xrPresentation .immersiveTop {
+  top: clamp(18px, 3vh, 34px);
+  right: clamp(22px, 4vw, 64px);
+  left: clamp(22px, 4vw, 64px);
+  display: grid;
+  grid-template-columns: auto auto auto minmax(0, 1fr) auto auto;
+  align-items: start;
+}
+
+.xrPresentation .backButton,
+.xrPresentation .viewBadge,
+.xrPresentation .sceneGuideButton,
+.xrPresentation .xrPresentationToggle,
+.xrPresentation .journeyMemoryControls button {
+  min-height: 50px;
+  border-radius: 999px;
+  padding: 0 18px;
+  font-size: clamp(0.9rem, 1.15vw, 1.08rem);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.24);
+}
+
+.xrPresentation .viewBadge {
+  max-width: 34vw;
+  justify-content: center;
+}
+
+.xrPresentation .journeyStops {
+  grid-column: 1 / -1;
+  justify-self: center;
+  margin: 16px 0 0;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(5, 8, 16, 0.46);
+  backdrop-filter: blur(14px);
+}
+
+.xrPresentation .journeyStops button {
+  min-height: 48px;
+  border-radius: 999px;
+  background: rgba(7, 22, 76, 0.68);
+}
+
+.xrPresentation .immersiveStory {
+  position: absolute;
+  right: clamp(28px, 5vw, 86px);
+  bottom: clamp(128px, 16vh, 184px);
+  left: clamp(28px, 5vw, 86px);
+  display: grid;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(280px, 1fr);
+  align-items: end;
+  gap: clamp(18px, 3vw, 42px);
+  max-width: none;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 20px;
+  padding: clamp(22px, 3vw, 36px);
+  background:
+    linear-gradient(110deg, rgba(7, 22, 76, 0.82), rgba(5, 8, 16, 0.58)),
+    rgba(5, 8, 16, 0.72);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(16px);
+}
+
+.xrPresentation .immersiveStory span {
+  grid-column: 1 / -1;
+}
+
+.xrPresentation .immersiveStory h1 {
+  margin: 0;
+  max-width: 760px;
+  font-size: clamp(2.8rem, 5.6vw, 6.7rem);
+  text-wrap: balance;
+}
+
+.xrPresentation .immersiveStory strong,
+.xrPresentation .immersiveStory p {
+  align-self: center;
+}
+
+.xrPresentation .immersiveStory strong {
+  margin: 0 0 9px;
+  font-size: clamp(1.2rem, 2vw, 1.75rem);
+}
+
+.xrPresentation .immersiveStory p {
+  font-size: clamp(1rem, 1.28vw, 1.25rem);
+  line-height: 1.45;
+}
+
+.xrPresentation .xrStopNote {
+  display: block;
+  grid-column: 2;
+}
+
+.xrPresentation .immersiveAudio {
+  right: clamp(28px, 5vw, 86px);
+  bottom: clamp(24px, 4vh, 44px);
+  left: clamp(28px, 5vw, 86px);
+  min-height: 96px;
+  border-radius: 18px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.xrPresentation .ambientToggle {
+  right: clamp(28px, 5vw, 86px);
+  bottom: clamp(132px, 14vh, 162px);
+}
+
+.xrPresentation .sceneGuidePanel {
+  top: clamp(110px, 15vh, 160px);
+  right: clamp(28px, 5vw, 86px);
+  width: min(520px, 36vw);
+  max-height: 62vh;
+  border-radius: 18px;
 }
 
 .sceneGuidePanel {
@@ -4551,6 +4693,106 @@ button {
 
   .ambientToggle {
     display: none;
+  }
+
+  .xrPresentation .immersiveTop {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .xrPresentation .backButton,
+  .xrPresentation .viewBadge,
+  .xrPresentation .sceneGuideButton,
+  .xrPresentation .xrPresentationToggle,
+  .xrPresentation .journeyMemoryControls button {
+    min-height: 44px;
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.72rem;
+  }
+
+  .xrPresentation .viewBadge {
+    max-width: none;
+  }
+
+  .xrPresentation .journeyMemoryControls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .xrPresentation .journeyStops {
+    display: flex;
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    max-width: none;
+    padding: 7px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+  }
+
+  .xrPresentation .journeyStops button {
+    flex: 0 0 auto;
+    min-height: 42px;
+    width: auto;
+    scroll-snap-align: start;
+    white-space: nowrap;
+  }
+
+  .xrPresentation .immersiveMobileTabs {
+    display: none;
+  }
+
+  .xrPresentation .immersiveStory {
+    display: grid;
+    right: 12px;
+    bottom: 108px;
+    left: 12px;
+    grid-template-columns: 1fr;
+    max-height: 47svh;
+    padding: 16px;
+    border-radius: 22px;
+  }
+
+  .xrPresentation .immersiveStory span,
+  .xrPresentation .immersiveStory h1,
+  .xrPresentation .immersiveStory strong,
+  .xrPresentation .immersiveStory p,
+  .xrPresentation .xrStopNote {
+    grid-column: 1;
+  }
+
+  .xrPresentation .immersiveStory h1 {
+    font-size: clamp(1.9rem, 10vw, 3rem);
+  }
+
+  .xrPresentation .immersiveStory p,
+  .xrPresentation .immersiveStory strong {
+    font-size: 0.98rem;
+  }
+
+  .xrPresentation .immersiveAudio {
+    display: grid;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 76px;
+    border-radius: 22px;
+  }
+
+  .xrPresentation .ambientToggle {
+    display: flex;
+    right: 12px;
+    bottom: 192px;
+  }
+
+  .xrPresentation .sceneGuidePanel {
+    right: 12px;
+    bottom: 104px;
+    left: 12px;
+    width: auto;
   }
 
   .brand {

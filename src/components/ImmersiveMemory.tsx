@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, BadgeInfo, ChevronLeft, ChevronRight, ExternalLink, MapPin } from "lucide-react";
+import { ArrowLeft, BadgeInfo, ChevronLeft, ChevronRight, ExternalLink, MapPin, Maximize2 } from "lucide-react";
 import { AudioPlayer } from "./AudioPlayer";
 import { AmbientSound } from "./AmbientSound";
 import type { MemoryPoint } from "../types";
@@ -34,6 +34,7 @@ export function ImmersiveMemory({
   const [showSceneGuide, setShowSceneGuide] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<MobilePanel>("none");
   const [journeyIndex, setJourneyIndex] = useState(0);
+  const [xrPresentationMode, setXrPresentationMode] = useState(true);
   const hasManualJourneyStopRef = useRef(false);
   const googleMapsKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const journeyStops = useMemo(() => {
@@ -62,6 +63,7 @@ export function ImmersiveMemory({
     setShowSceneGuide(false);
     setMobilePanel("none");
     setJourneyIndex(0);
+    setXrPresentationMode(true);
     hasManualJourneyStopRef.current = false;
   }, [memory.id]);
 
@@ -123,7 +125,10 @@ export function ImmersiveMemory({
       memory.media.kind === "google-street-view");
 
   return (
-    <section className={`immersiveMemory mobilePanel-${mobilePanel}`} aria-label={`${memory.title} immersive view`}>
+    <section
+      className={`immersiveMemory mobilePanel-${mobilePanel} ${xrPresentationMode ? "xrPresentation" : ""}`}
+      aria-label={`${memory.title} immersive view`}
+    >
       {streetViewUrl ? (
         <iframe
           src={streetViewUrl}
@@ -149,6 +154,15 @@ export function ImmersiveMemory({
             Journey {journeyStep} of {journeyTotal}
           </span>
         ) : null}
+        <button
+          type="button"
+          className={`xrPresentationToggle ${xrPresentationMode ? "active" : ""}`}
+          onClick={() => setXrPresentationMode((active) => !active)}
+          aria-pressed={xrPresentationMode}
+        >
+          <Maximize2 size={16} />
+          XR / Igloo
+        </button>
         {onPreviousMemory || onNextMemory ? (
           <div className="journeyMemoryControls" aria-label="Memory journey controls">
             <button
@@ -260,6 +274,11 @@ export function ImmersiveMemory({
         <h1>{memory.title}</h1>
         <strong>{memory.childSubtitle}</strong>
         <p>{memory.description}</p>
+        {activeJourneyStop ? (
+          <small className="xrStopNote">
+            {activeJourneyStop.role}: {activeJourneyStop.note}
+          </small>
+        ) : null}
       </div>
 
       {(journeyStops.length > 1 || onPreviousMemory || onNextMemory) ? (

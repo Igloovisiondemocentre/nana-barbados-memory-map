@@ -286,8 +286,16 @@ export default function App() {
     setAutoPlaySignal((value) => value + 1);
   };
 
+  const requestPresentationFullscreen = () => {
+    const root = document.documentElement;
+    if (!document.fullscreenElement && root.requestFullscreen) {
+      root.requestFullscreen().catch(() => undefined);
+    }
+  };
+
   const startImmersiveJourney = () => {
     const firstMemory = journeyMemories[0] ?? memories[0];
+    requestPresentationFullscreen();
     setJourneyModeActive(true);
     setActiveId(firstMemory.id);
     setImmersiveId(firstMemory.id);
@@ -491,7 +499,7 @@ export default function App() {
         <nav className="headerNav landingNav" aria-label="Primary">
           <button type="button" className="xrButton" onClick={startImmersiveJourney}>
             <Gamepad2 size={22} />
-            <span>Enter 360</span>
+            <span>WebXR 360</span>
           </button>
           {page === "map" ? (
             <div className="enter360Nudge" aria-hidden="true">
