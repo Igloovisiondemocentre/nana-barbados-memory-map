@@ -1517,6 +1517,86 @@ button {
   box-shadow: 0 12px 26px rgba(255, 207, 27, 0.22);
 }
 
+.xrButtonWeb {
+  border-color: rgba(7, 22, 76, 0.28);
+  color: #fff;
+  background: var(--boda-blue-deep);
+  box-shadow: 0 12px 26px rgba(7, 22, 76, 0.2);
+}
+
+.floatingXrLauncher {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 70;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, auto));
+  gap: 8px;
+  max-width: min(420px, calc(100vw - 28px));
+  border: 1px solid rgba(7, 22, 76, 0.18);
+  border-radius: 22px;
+  padding: 9px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 22px 54px rgba(7, 22, 76, 0.22);
+  backdrop-filter: blur(16px);
+}
+
+.floatingXrLauncher.inImmersive {
+  top: max(92px, env(safe-area-inset-top));
+  bottom: auto;
+  background: rgba(5, 8, 16, 0.58);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.floating360Button,
+.floatingWebXrButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  border: 0;
+  border-radius: 16px;
+  padding: 0 13px;
+  font-size: 0.86rem;
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.floating360Button {
+  color: #111;
+  background: var(--boda-yellow);
+}
+
+.floatingWebXrButton {
+  color: #fff;
+  background: var(--boda-blue-deep);
+}
+
+.floatingWebXrButton.active {
+  color: #111;
+  background: #fff;
+  outline: 2px solid var(--boda-yellow);
+}
+
+.floatingXrLauncher p {
+  grid-column: 1 / -1;
+  max-width: 360px;
+  margin: 0;
+  border-radius: 14px;
+  padding: 8px 10px;
+  color: var(--boda-blue-deep);
+  background: rgba(255, 255, 255, 0.94);
+  font-size: 0.76rem;
+  font-weight: 850;
+  line-height: 1.35;
+}
+
+.floatingXrLauncher.inImmersive p {
+  color: #fff;
+  background: rgba(7, 22, 76, 0.78);
+}
+
 .enter360Nudge {
   position: absolute;
   top: calc(100% + 12px);
@@ -4793,6 +4873,32 @@ button {
     bottom: 104px;
     left: 12px;
     width: auto;
+  }
+
+  .floatingXrLauncher {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+
+  .floatingXrLauncher.inImmersive {
+    top: 156px;
+    right: 10px;
+    bottom: auto;
+    left: 10px;
+  }
+
+  .floating360Button,
+  .floatingWebXrButton {
+    min-height: 46px;
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  .floatingXrLauncher p {
+    max-width: none;
   }
 
   .brand {

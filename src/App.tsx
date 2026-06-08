@@ -79,6 +79,21 @@ type UserPin = {
   };
 };
 
+type WebXrSession = {
+  end?: () => Promise<void>;
+  addEventListener?: (type: "end", listener: () => void) => void;
+};
+
+type WebXrNavigator = Navigator & {
+  xr?: {
+    isSessionSupported?: (mode: "immersive-vr") => Promise<boolean>;
+    requestSession: (
+      mode: "immersive-vr",
+      options?: { optionalFeatures?: string[] },
+    ) => Promise<WebXrSession>;
+  };
+};
+
 const parishOptions = [
   { name: "Saint Lucy", x: 22, y: 17 },
   { name: "Saint Peter", x: 25, y: 35 },
@@ -149,6 +164,8 @@ export default function App() {
   const [immersiveId, setImmersiveId] = useState<string | null>(null);
   const [autoPlaySignal, setAutoPlaySignal] = useState(0);
   const [journeyModeActive, setJourneyModeActive] = useState(false);
+  const [webXrStatus, setWebXrStatus] = useState("");
+  const [webXrActive, setWebXrActive] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
@@ -293,13 +310,44 @@ export default function App() {
     }
   };
 
-  const startImmersiveJourney = () => {
+  const showImmersiveJourney = (requestFullscreen = true) => {
     const firstMemory = journeyMemories[0] ?? memories[0];
-    requestPresentationFullscreen();
+    if (requestFullscreen) {
+      requestPresentationFullscreen();
+    }
     setJourneyModeActive(true);
     setActiveId(firstMemory.id);
     setImmersiveId(firstMemory.id);
     setAutoPlaySignal((value) => value + 1);
+  };
+
+  const startImmersiveJourney = () => {
+    showImmersiveJourney(true);
+  };
+
+  const activateWebXrSession = async () => {
+    showImmersiveJourney(false);
+    const xr = (navigator as WebXrNavigator).xr;
+
+    if (!xr?.requestSession) {
+      setWebXrStatus("WebXR is not available in this browser. The 360 presentation is open instead.");
+      return;
+    }
+
+    try {
+      // Request the session directly from the click/tap handler; awaiting feature checks first can lose browser activation.
+      const session = await xr.requestSession("immersive-vr", {
+        optionalFeatures: ["local-floor", "bounded-floor", "hand-tracking"],
+      });
+      setWebXrActive(true);
+      setWebXrStatus("WebXR session requested. If Igloo is connected, use the room/headset controls to present this 360 view.");
+      session.addEventListener?.("end", () => {
+        setWebXrActive(false);
+        setWebXrStatus("WebXR session ended. The 360 presentation is still available on screen.");
+      });
+    } catch {
+      setWebXrStatus("WebXR could not start. The 360 presentation is open, but the browser blocked or declined XR activation.");
+    }
   };
 
   const goToImmersiveJourneyIndex = (index: number) => {
@@ -499,7 +547,11 @@ export default function App() {
         <nav className="headerNav landingNav" aria-label="Primary">
           <button type="button" className="xrButton" onClick={startImmersiveJourney}>
             <Gamepad2 size={22} />
-            <span>WebXR 360</span>
+            <span>Open 360</span>
+          </button>
+          <button type="button" className="xrButton xrButtonWeb" onClick={activateWebXrSession}>
+            <Gamepad2 size={22} />
+            <span>Enter WebXR</span>
           </button>
           {page === "map" ? (
             <div className="enter360Nudge" aria-hidden="true">
@@ -1074,6 +1126,22 @@ export default function App() {
           }}
         />
       ) : null}
+
+      <div className={`floatingXrLauncher ${immersiveId ? "inImmersive" : ""}`} aria-label="360 and WebXR launcher">
+        <button type="button" className="floating360Button" onClick={startImmersiveJourney}>
+          <Gamepad2 size={18} />
+          Open 360
+        </button>
+        <button
+          type="button"
+          className={`floatingWebXrButton ${webXrActive ? "active" : ""}`}
+          onClick={activateWebXrSession}
+        >
+          <Gamepad2 size={18} />
+          Enter WebXR
+        </button>
+        {webXrStatus ? <p role="status">{webXrStatus}</p> : null}
+      </div>
     </div>
   );
 }
